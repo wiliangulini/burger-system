@@ -17,6 +17,8 @@ node_modules/
 .next/
 dist/
 build/
+out/
+tsconfig.tsbuildinfo
 coverage/
 
 # OS/editor
