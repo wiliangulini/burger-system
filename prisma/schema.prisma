@@ -1,0 +1,161 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleUsuario {
+  OWNER
+  MANAGER
+  ATTENDANT
+  KITCHEN
+}
+
+enum StatusPedido {
+  AGUARDANDO
+  EM_PREPARO
+  PRONTO
+  ENTREGUE
+  CANCELADO
+}
+
+enum TipoEntrega {
+  ENTREGA
+  RETIRADA
+}
+
+model Categoria {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique @db.VarChar(120)
+  slug      String    @unique @db.VarChar(160)
+  ativa     Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
+  produtos  Produto[]
+
+  @@index([ativa])
+}
+
+model Produto {
+  id          Int          @id @default(autoincrement())
+  categoriaId Int
+  nome        String       @db.VarChar(150)
+  slug        String       @unique @db.VarChar(180)
+  descricao   String?      @db.Text
+  preco       Decimal      @db.Decimal(10, 2)
+  estoque     Int?
+  imagemPath  String?      @db.VarChar(500)
+  ativo       Boolean      @default(true)
+  createdAt   DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime     @updatedAt @db.Timestamptz(3)
+  categoria   Categoria    @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  itensPedido ItemPedido[]
+
+  @@index([categoriaId, ativo])
+}
+
+model Usuario {
+  id               Int               @id @default(autoincrement())
+  nome             String            @db.VarChar(120)
+  email            String            @unique @db.VarChar(254)
+  senhaHash        String            @db.VarChar(255)
+  role             RoleUsuario
+  ativo            Boolean           @default(true)
+  createdAt        DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime          @updatedAt @db.Timestamptz(3)
+  historicosStatus HistoricoStatus[]
+  auditLogs        AuditLog[]
+
+  @@index([ativo, role])
+}
+
+model Pedido {
+  id                 Int               @id @default(autoincrement())
+  codigoPublico      String            @unique @db.VarChar(12)
+  idempotencyKey     String            @unique @db.VarChar(128)
+  clienteNome        String            @db.VarChar(120)
+  clienteTelefone    String            @db.VarChar(20)
+  enderecoSnapshot   String?           @db.Text
+  tipoEntrega        TipoEntrega
+  formaPagamento     String            @db.VarChar(50)
+  observacoes        String?           @db.Text
+  subtotal           Decimal           @db.Decimal(10, 2)
+  taxaEntrega        Decimal           @db.Decimal(10, 2)
+  total              Decimal           @db.Decimal(10, 2)
+  statusAtual        StatusPedido      @default(AGUARDANDO)
+  createdAt          DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime          @updatedAt @db.Timestamptz(3)
+  itens              ItemPedido[]
+  historicosDeStatus HistoricoStatus[]
+
+  @@index([statusAtual, createdAt])
+  @@index([createdAt])
+  @@index([clienteTelefone])
+}
+
+model ItemPedido {
+  id                  Int      @id @default(autoincrement())
+  pedidoId            Int
+  produtoId           Int?
+  nomeProdutoSnapshot String   @db.VarChar(150)
+  precoUnitario       Decimal  @db.Decimal(10, 2)
+  quantidade          Int
+  subtotal            Decimal  @db.Decimal(10, 2)
+  adicionaisSnapshot  Json?    @db.JsonB
+  createdAt           DateTime @default(now()) @db.Timestamptz(3)
+  pedido              Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Restrict)
+  produto             Produto? @relation(fields: [produtoId], references: [id], onDelete: SetNull)
+
+  @@index([pedidoId])
+  @@index([produtoId])
+}
+
+model HistoricoStatus {
+  id             Int           @id @default(autoincrement())
+  pedidoId       Int
+  usuarioId      Int?
+  statusAnterior StatusPedido?
+  statusNovo     StatusPedido
+  observacao     String?       @db.VarChar(500)
+  alteradoEm     DateTime      @default(now()) @db.Timestamptz(3)
+  pedido         Pedido        @relation(fields: [pedidoId], references: [id], onDelete: Restrict)
+  usuario        Usuario?      @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([pedidoId, alteradoEm])
+  @@index([usuarioId])
+}
+
+model ConfigLoja {
+  id                   Int      @id @default(1)
+  nomeLoja             String   @db.VarChar(150)
+  endereco             String?  @db.Text
+  telefone             String?  @db.VarChar(20)
+  whatsapp             String?  @db.VarChar(20)
+  horarioFuncionamento String?  @db.Text
+  taxaEntrega          Decimal  @default(0) @db.Decimal(10, 2)
+  pedidoMinimo         Decimal  @default(0) @db.Decimal(10, 2)
+  tempoMedioMinutos    Int      @default(30)
+  aceitaPedidos        Boolean  @default(true)
+  logoPath             String?  @db.VarChar(500)
+  createdAt            DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime @updatedAt @db.Timestamptz(3)
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int?
+  acao       String   @db.VarChar(100)
+  entidade   String   @db.VarChar(100)
+  entidadeId String?  @db.VarChar(100)
+  metadata   Json?    @db.JsonB
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  usuario    Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([entidade, entidadeId])
+  @@index([usuarioId, createdAt])
+}

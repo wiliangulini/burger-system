@@ -15,6 +15,7 @@ _tmp/
 # Dependencies and builds
 node_modules/
 .next/
+src/generated/prisma/
 dist/
 build/
 out/
