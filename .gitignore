@@ -1,0 +1,25 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local agent settings
+.claude/settings.local.json
+.codex/logs/
+.codex-log/
+
+# Temporary files
+_tmp/
+*.log
+
+# Dependencies and builds
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/settings.json
