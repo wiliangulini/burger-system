@@ -42,7 +42,7 @@ Não altere arquivos. Faça análise objetiva com base em evidência.
 2. Separe fatos, hipóteses, riscos e decisões necessárias.
 3. Mapeie módulos afetados: catálogo, admin, auth/RBAC, Prisma, carrinho, checkout, pedidos, cozinha, pagamento, delivery, UI ou observabilidade.
 4. Para tarefa sensível ou multiarquivo, proponha plano incremental antes de editar.
-5. Execute somente a menor alteração segura suficiente, quando a edição estiver autorizada.
+5. Não altere a implementação; registre qualquer correção necessária como bloqueador ou pendência.
 6. Preserve Server Components por padrão e Client Components apenas para interatividade.
 7. Preserve validação server-side com Zod em entradas externas.
 8. Preserve regra de preço: servidor recalcula checkout e pedidos gravam snapshots.

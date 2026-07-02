@@ -26,7 +26,7 @@ Esta etapa consolida as seguintes entradas do `roadmap-execucao-ia.md`:
 
 ## Objetivo da etapa
 
-Implementar gerenciamento administrativo de categorias com validação server-side e proteção por role ADMIN.
+Implementar gerenciamento administrativo de categorias com validação server-side e autorização para `OWNER` ou `MANAGER`.
 
 ## Pré-requisitos
 
@@ -47,7 +47,7 @@ E04 aprovada; Auth admin funcionando; Prisma com Categoria modelada.
 - Catálogo público completo.
 - Upload de imagens.
 - Alterar autenticação, checkout ou modelo de pedido.
-- Permitir mutação admin sem sessão/role ADMIN.
+- Permitir mutação de categoria sem sessão ou sem role `OWNER`/`MANAGER`.
 - Excluir categoria com produtos/pedidos sem regra segura.
 - Não fazer commit, merge, push ou deploy automaticamente.
 
@@ -87,7 +87,7 @@ Antes de alterar qualquer arquivo, leia obrigatoriamente:
 - docs/ia-prompts/etapas/E05-categorias-admin.md
 
 Objetivo da etapa:
-Implementar gerenciamento administrativo de categorias com validação server-side e proteção por role ADMIN.
+Implementar gerenciamento administrativo de categorias com validação server-side e autorização para `OWNER` ou `MANAGER`.
 
 Pré-requisito da etapa:
 E04 aprovada; Auth admin funcionando; Prisma com Categoria modelada.
@@ -105,7 +105,7 @@ Escopo proibido:
 - Catálogo público completo.
 - Upload de imagens.
 - Alterar autenticação, checkout ou modelo de pedido.
-- Permitir mutação admin sem sessão/role ADMIN.
+- Permitir mutação de categoria sem sessão ou sem role `OWNER`/`MANAGER`.
 - Excluir categoria com produtos/pedidos sem regra segura.
 
 Procedimento obrigatório:
@@ -141,7 +141,7 @@ Arquivos proibidos ou sensíveis:
 - `.env.local`
 
 Critérios de aceite:
-- CRUD de categorias funciona apenas para ADMIN autenticado.
+- CRUD de categorias funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Dados são validados no servidor.
 - Slug/nome duplicados são rejeitados ou tratados com erro claro.
 - Não há mutação baseada apenas no client.
@@ -177,8 +177,10 @@ Verificar se a implementação cumpre a etapa E05 sem extrapolar escopo, sem enf
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário. Priorize análise, apontamentos e bloqueadores.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E05-categorias-admin-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
-- CRUD de categorias funciona apenas para ADMIN autenticado.
+- CRUD de categorias funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Dados são validados no servidor.
 - Slug/nome duplicados são rejeitados ou tratados com erro claro.
 - Não há mutação baseada apenas no client.
@@ -243,7 +245,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E05 — Categorias admin.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E05-categorias-admin-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -258,7 +262,7 @@ Objetivo:
 Confirmar se a etapa pode ser encerrada e se está segura para avançar para a próxima etapa.
 
 Audite:
-- CRUD de categorias funciona apenas para ADMIN autenticado.
+- CRUD de categorias funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Dados são validados no servidor.
 - Slug/nome duplicados são rejeitados ou tratados com erro claro.
 - Não há mutação baseada apenas no client.
@@ -277,14 +281,16 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa.
 - Confirmação de ausência de aumento de escopo.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
 
-- CRUD de categorias funciona apenas para ADMIN autenticado.
+- CRUD de categorias funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Dados são validados no servidor.
 - Slug/nome duplicados são rejeitados ou tratados com erro claro.
 - Não há mutação baseada apenas no client.
@@ -336,4 +342,3 @@ O agente deve responder com:
 - Pendências.
 - Riscos.
 - Confirmação de ausência de aumento de escopo.
-

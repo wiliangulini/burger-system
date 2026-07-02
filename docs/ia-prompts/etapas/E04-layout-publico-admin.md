@@ -180,6 +180,8 @@ Verificar se a implementação cumpre a etapa E04 sem extrapolar escopo, sem enf
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário. Priorize análise, apontamentos e bloqueadores.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E04-layout-publico-admin-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
 - Área pública tem layout base responsivo.
 - Área admin tem shell protegido e navegação básica.
@@ -246,7 +248,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E04 — Layout público e admin.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E04-layout-publico-admin-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -269,7 +273,7 @@ Audite:
 - Lint, typecheck e build passam.
 
 Bloqueadores conhecidos desta etapa:
-- Layout admin acessível sem sessão ADMIN.
+- Layout admin acessível sem sessão `OWNER` válida nesta etapa.
 - CRUD, carrinho ou checkout antecipados.
 - Hooks usados em Server Components sem necessidade.
 - Componentes globais com lógica de domínio indevida.
@@ -279,9 +283,11 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa.
 - Confirmação de ausência de aumento de escopo.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
@@ -306,7 +312,7 @@ git status --short
 
 ## Bloqueadores da etapa
 
-- Layout admin acessível sem sessão ADMIN.
+- Layout admin acessível sem sessão `OWNER` válida nesta etapa.
 - CRUD, carrinho ou checkout antecipados.
 - Hooks usados em Server Components sem necessidade.
 - Componentes globais com lógica de domínio indevida.
@@ -337,4 +343,3 @@ O agente deve responder com:
 - Pendências.
 - Riscos.
 - Confirmação de ausência de aumento de escopo.
-

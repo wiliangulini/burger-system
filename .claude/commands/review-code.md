@@ -8,78 +8,47 @@ Tarefa/contexto recebido:
 
 $ARGUMENTS
 
-## Papel do agente
+## Modo
 
-Atue como revisor de código sênior para o `burger-shop-system`.
+Atue como revisor sênior. Não altere implementação, testes, schema, migrations,
+prompts ou configurações.
 
-## Leitura obrigatória
+## Contrato de escrita
 
-1. Verifique branch atual e `git status`.
-2. Leia `PROJECT_RULES.md`.
-3. Leia `AGENTS.md`.
-4. Leia `CLAUDE.md`.
-5. Leia regras relevantes em `.claude/rules/` conforme o módulo afetado.
-6. Se houver continuidade, leia o relatório mais recente em `docs/ia-auditorias/` e `CODEX.md`.
-7. Leia arquivos reais relacionados antes de concluir ou editar.
-
-## Regra principal
-
-Não edite arquivos. Separe bloqueadores de melhorias opcionais.
-
-## Regras de escopo
-
-- Identifique objetivo, comportamento atual, comportamento esperado e critérios de aceite.
-- Liste arquivos prováveis e arquivos proibidos antes de editar, quando houver edição.
-- Não leia nem edite `.env`, `.env.*`, secrets ou credenciais.
-- Não execute deploy, push, reset, clean, `rm -rf`, `sudo`, `ssh`, `curl` ou `wget` sem autorização explícita.
-- Não instale dependências sem justificativa e aprovação.
-- Não altere Auth.js/RBAC, Prisma/migrations, checkout, pedidos, pagamentos ou webhooks sem plano.
-- Não declare validação executada sem evidência.
+- Se `$ARGUMENTS` informar um relatório, o caminho deve estar em
+  `docs/ia-auditorias/`, terminar em `-revisao.md` e corresponder à etapa.
+- Esse relatório será o único arquivo que pode ser criado ou atualizado.
+- Sem caminho exato, responda somente no chat.
+- Não derive nem corrija silenciosamente caminho ambíguo.
+- Se o caminho violar o contrato, não escreva e reporte bloqueio.
 
 ## Procedimento
 
-1. Resuma a tarefa em uma frase objetiva.
-2. Separe fatos, hipóteses, riscos e decisões necessárias.
-3. Mapeie módulos afetados: catálogo, admin, auth/RBAC, Prisma, carrinho, checkout, pedidos, cozinha, pagamento, delivery, UI ou observabilidade.
-4. Para tarefa sensível ou multiarquivo, proponha plano incremental antes de editar.
-5. Execute somente a menor alteração segura suficiente, quando a edição estiver autorizada.
-6. Preserve Server Components por padrão e Client Components apenas para interatividade.
-7. Preserve validação server-side com Zod em entradas externas.
-8. Preserve regra de preço: servidor recalcula checkout e pedidos gravam snapshots.
-9. Revise `git diff` antes de concluir.
-10. Gere relatório final.
+1. Confirme branch, `git status`, objetivo e critérios de aceite.
+2. Leia `PROJECT_RULES.md`, `AGENTS.md`, `CLAUDE.md` e as rules aplicáveis.
+3. Leia o diff e os contratos consumidores necessários.
+4. Verifique escopo, comportamento, segurança, dados, falhas e regressões.
+5. Avalie se os testes mitigam os riscos da mudança.
+6. Classifique cada achado como bloqueador, alto, médio, baixo ou observação.
+7. Para cada achado, cite arquivo/linha, impacto, evidência e correção mínima.
+8. Não implemente as correções.
 
 ## Validações
 
-Antes de executar comandos, leia `package.json` e confirme scripts reais. Use somente comandos existentes e seguros:
+Leia `package.json` antes de executar qualquer script. Use apenas validações
+existentes, seguras e relevantes. Separe comandos reexecutados de resultados
+apenas registrados em relatórios anteriores.
 
-```bash
-npm run lint
-npm run typecheck
-npm run build
-npm test
-npm run test
-npm run test:unit
-npm run test:e2e
-npx prisma validate
-npx prisma generate
-npx prisma migrate status
-```
-
-`npx prisma migrate dev` e `npx prisma db seed` exigem confirmação de ambiente local. Nunca execute `migrate reset` sem autorização explícita.
-
-## Formato de relatório
+## Saída
 
 ```md
-## Resumo
-## Escopo
-## Arquivos lidos
-## Arquivos alterados
-## Arquivos criados
-## Decisões técnicas
-## Validações executadas
-## Validações não executadas
-## Riscos e pendências
-## Próximo passo recomendado
+## Veredito
+## Achados por severidade
+## Evidências dos critérios de aceite
+## Validações reexecutadas
+## Evidências históricas não reexecutadas
+## Riscos remanescentes
+## Correções obrigatórias
+## Correções recomendadas
 Status final: Aprovado | Aprovado com observações | Requer ajustes | Bloqueado
 ```
