@@ -199,7 +199,7 @@ correspondente antes de editar; ela exige plano quando a mudança for sensível 
 | Delivery, horários e store settings | §12 | `.claude/rules/delivery-store-settings.md` |
 | App Router, Server/Client, Server Actions, Route Handlers | §4 | `.claude/rules/nextjs-app-router.md` |
 | UI/UX e Tailwind | §13 | `.claude/rules/ui-ux-tailwind.md` |
-| Segurança, secrets e deploy (transversal) | §15 | `.claude/rules/security-secrets-deploy.md` |
+| Segurança, secrets e deploy (transversal) | §15 | `.claude/rules/security-deploy.md` |
 
 Invariantes que nunca mudam sem plano: preço/taxa recalculados no servidor; pedido grava snapshots;
 role validada no servidor; migrations aplicadas não são reescritas destrutivamente; webhook real

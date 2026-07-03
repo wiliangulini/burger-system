@@ -20,7 +20,7 @@ nenhum outro arquivo gravável. Sem caminho, responda somente no chat.
 Leia `PROJECT_RULES.md`, `AGENTS.md`, `CLAUDE.md` e, conforme o escopo:
 
 - `.claude/rules/auth-admin-rbac.md`;
-- `.claude/rules/security-secrets-deploy.md`;
+- `.claude/rules/security-deploy.md`;
 - `.claude/rules/cart-checkout-orders.md`;
 - `.claude/rules/payments-webhooks.md`;
 - `.claude/rules/catalog-products.md`.
