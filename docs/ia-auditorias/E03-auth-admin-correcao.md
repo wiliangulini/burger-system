@@ -2,10 +2,10 @@
 
 ## 1. Identificação
 
-**Agente:** Codex  
-**Data:** 2026-07-03  
-**Branch atual:** `feature/e03-auth-admin`  
-**Tipo de tarefa:** Correção pós-revisão  
+**Agente:** Codex
+**Data:** 2026-07-03
+**Branch atual:** `feature/e03-auth-admin`
+**Tipo de tarefa:** Correção pós-revisão
 **Status final:** Aprovado com observações
 
 ## 2. Objetivo
@@ -226,8 +226,8 @@ Nenhuma validação obrigatória ficou pendente.
 
 ## 20. Continuidade para outro agente
 
-**Pode ser continuado por:** Claude Code  
-**Skill/comando sugerido:** auditoria final somente leitura da E03  
+**Pode ser continuado por:** Claude Code
+**Skill/comando sugerido:** auditoria final somente leitura da E03
 **Próximo passo recomendado:** atualizar
 `docs/ia-auditorias/E03-auth-admin-auditoria-final.md` com verificação
 independente deste relatório e do estado final.
