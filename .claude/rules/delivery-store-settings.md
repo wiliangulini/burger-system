@@ -1,43 +1,20 @@
+---
+paths:
+  # módulo ainda não implementado — caminhos-alvo (a confirmar)
+  - "app/admin/**/configuracoes/**/*"
+  # futuros: "src/services/delivery/**/*", "src/schemas/*loja*", "src/schemas/*delivery*"
+---
+
 # Regra Claude — Delivery e configurações da loja
 
-## Aplicação
+Derivada de `PROJECT_RULES.md §12`. Se esta rule divergir da regra do projeto,
+atualize `PROJECT_RULES.md` primeiro. Procedimento, validação e sinais de bloqueio
+vivem no protocolo comum (`AGENTS.md §3-§10`, `PROJECT_RULES.md §17`).
 
-Use esta regra quando a tarefa tocar delivery e configurações da loja no `burger-shop-system`.
+## Invariantes
 
-## Regras específicas
-
-- StoreSettings define nome, WhatsApp, abertura manual, tempo médio e pedido mínimo.
-- OperatingHour define disponibilidade por dia/horário.
-- DeliveryArea define área, taxa, mínimo e status.
+- `StoreSettings` define nome, WhatsApp, abertura manual, tempo médio e pedido mínimo.
+- `OperatingHour` define disponibilidade por dia/horário.
+- `DeliveryArea` define área, taxa, mínimo e status.
 - Checkout valida loja aberta, pedido mínimo e entrega antes de criar pedido.
-- Alterações operacionais relevantes geram AuditLog.
-
-## Procedimento obrigatório
-
-1. Confirme branch e `git status`.
-2. Leia `PROJECT_RULES.md`, `AGENTS.md` e `CLAUDE.md`.
-3. Leia os arquivos diretamente relacionados ao módulo.
-4. Identifique contratos, consumidores e riscos.
-5. Se a mudança for sensível ou multiarquivo, proponha plano antes de editar.
-6. Implemente a menor alteração segura suficiente.
-7. Revise diff.
-8. Execute validações existentes e relevantes.
-9. Informe validações não executadas.
-10. Finalize com status.
-
-## Validações recomendadas
-
-- `npm run lint`, se existir.
-- `npm run typecheck`, se existir.
-- `npm run build`, se existir.
-- Testes unitários/e2e relevantes, se existirem.
-- Validação manual do fluxo afetado.
-- `npx prisma validate` quando houver Prisma.
-
-## Sinais de bloqueio
-
-- necessidade de secrets ou `.env`;
-- dependência nova sem aprovação;
-- alteração destrutiva de banco;
-- mudança de contrato público sem revisão;
-- risco de expor admin, pedido, pagamento ou dados pessoais.
+- Alterações operacionais relevantes geram `AuditLog`.
