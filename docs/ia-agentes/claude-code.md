@@ -78,7 +78,7 @@ Pasta: `.claude/rules/`.
 | `nextjs-app-router.md` | App Router, Server Components, Server Actions e Route Handlers. |
 | `payments-webhooks.md` | Pagamento manual, adapter futuro e webhooks. |
 | `prisma-database.md` | Prisma, migrations, seed, índices e transações. |
-| `security-secrets-deploy.md` | Secrets, deploy, comandos bloqueados e segurança web. |
+| `security-deploy.md` | Secrets, deploy, comandos bloqueados e segurança web. |
 | `ui-ux-tailwind.md` | UI/UX, Tailwind, acessibilidade e responsividade. |
 
 Use a regra modular quando a tarefa tocar o domínio correspondente. Para mudanças sensíveis ou multiarquivo, o padrão é planejar antes de editar.
