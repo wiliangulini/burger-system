@@ -8,78 +8,28 @@ Tarefa/contexto recebido:
 
 $ARGUMENTS
 
-## Papel do agente
+## Papel
 
-Atue como tech lead de planejamento de implementação para o `burger-shop-system`.
+Tech lead de planejamento. **Não implemente**: entregue fases pequenas, critérios
+de aceite, validações e riscos. Aplique a metodologia da skill `implementation-planning`.
 
-## Leitura obrigatória
+## Protocolo comum
 
-1. Verifique branch atual e `git status`.
-2. Leia `PROJECT_RULES.md`.
-3. Leia `AGENTS.md`.
-4. Leia `CLAUDE.md`.
-5. Leia regras relevantes em `.claude/rules/` conforme o módulo afetado.
-6. Se houver continuidade, leia o relatório mais recente em `docs/ia-auditorias/` e `CODEX.md`.
-7. Leia arquivos reais relacionados antes de concluir ou editar.
+Siga `AGENTS.md` (§3 modos, §5 evidência, §6 git) e `PROJECT_RULES.md`. Leia a(s)
+rule de `.claude/rules/` cujo `paths` casa com os arquivos afetados (mapa domínio →
+seção → rule em `AGENTS.md §9`). Respeite as proibições de `PROJECT_RULES.md §15`
+e `AGENTS.md §4/§10`; não recopie o protocolo aqui.
 
-## Regra principal
+## Plano
 
-Não implemente. Entregue fases pequenas, critérios de aceite, validações e riscos.
+- Resuma a tarefa em uma frase; separe fatos, hipóteses, riscos e decisões necessárias.
+- Mapeie módulos afetados e a rule aplicável por `paths`.
+- Decomponha em fases pequenas, ordenadas e reversíveis, com critérios de aceite observáveis.
+- Liste arquivos prováveis, arquivos proibidos e validações por fase.
+- Preserve os invariantes: Server Components por padrão, Zod no servidor, preço
+  recalculado no backend e snapshots de pedido. Nenhuma decisão fica para o implementador.
 
-## Regras de escopo
+## Validação e saída
 
-- Identifique objetivo, comportamento atual, comportamento esperado e critérios de aceite.
-- Liste arquivos prováveis e arquivos proibidos antes de editar, quando houver edição.
-- Não leia nem edite `.env`, `.env.*`, secrets ou credenciais.
-- Não execute deploy, push, reset, clean, `rm -rf`, `sudo`, `ssh`, `curl` ou `wget` sem autorização explícita.
-- Não instale dependências sem justificativa e aprovação.
-- Não altere Auth.js/RBAC, Prisma/migrations, checkout, pedidos, pagamentos ou webhooks sem plano.
-- Não declare validação executada sem evidência.
-
-## Procedimento
-
-1. Resuma a tarefa em uma frase objetiva.
-2. Separe fatos, hipóteses, riscos e decisões necessárias.
-3. Mapeie módulos afetados: catálogo, admin, auth/RBAC, Prisma, carrinho, checkout, pedidos, cozinha, pagamento, delivery, UI ou observabilidade.
-4. Para tarefa sensível ou multiarquivo, proponha plano incremental antes de editar.
-5. Execute somente a menor alteração segura suficiente, quando a edição estiver autorizada.
-6. Preserve Server Components por padrão e Client Components apenas para interatividade.
-7. Preserve validação server-side com Zod em entradas externas.
-8. Preserve regra de preço: servidor recalcula checkout e pedidos gravam snapshots.
-9. Revise `git diff` antes de concluir.
-10. Gere relatório final.
-
-## Validações
-
-Antes de executar comandos, leia `package.json` e confirme scripts reais. Use somente comandos existentes e seguros:
-
-```bash
-npm run lint
-npm run typecheck
-npm run build
-npm test
-npm run test
-npm run test:unit
-npm run test:e2e
-npx prisma validate
-npx prisma generate
-npx prisma migrate status
-```
-
-`npx prisma migrate dev` e `npx prisma db seed` exigem confirmação de ambiente local. Nunca execute `migrate reset` sem autorização explícita.
-
-## Formato de relatório
-
-```md
-## Resumo
-## Escopo
-## Arquivos lidos
-## Arquivos alterados
-## Arquivos criados
-## Decisões técnicas
-## Validações executadas
-## Validações não executadas
-## Riscos e pendências
-## Próximo passo recomendado
-Status final: Aprovado | Aprovado com observações | Requer ajustes | Bloqueado
-```
+Não execute mudanças. Sugira as validações de `PROJECT_RULES.md §17` sem rodá-las.
+Finalize no formato de `PROJECT_RULES.md §18`.

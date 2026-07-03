@@ -182,7 +182,7 @@ Nenhuma UI, rota, autenticação, checkout ou funcionalidade além da modelagem 
 
 Enviar C1 ao Codex (ou aplicar aqui com autorização explícita): mover `lib/db.ts` para `src/lib/db.ts`, atualizar import no seed, revalidar typecheck e build. Após confirmação, realizar commit manual da etapa E02 e avançar para E03.
 
-**Skill/comando sugerido para correção:** `controlled-implementation` ou `senior-code-agent` com escopo restrito a C1.
+**Skill/comando sugerido para correção:** `senior-code-agent` com escopo restrito a C1.
 
 ---
 

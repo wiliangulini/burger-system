@@ -41,7 +41,7 @@ E09 aprovada; pedidos são persistidos com snapshot e status inicial; admin prot
 - Implementar máquina de estados explícita.
 - Permitir transições válidas de status.
 - Registrar histórico de mudança de status com usuário/data.
-- Validar autorização ADMIN em toda mutação.
+- Validar `OWNER`, `MANAGER` ou `ATTENDANT` em mutações administrativas e limitar `KITCHEN` às transições operacionais permitidas.
 - Adicionar testes unitários da máquina de estados e integração mínima da alteração.
 
 ## Escopo proibido
@@ -98,7 +98,7 @@ Escopo permitido:
 - Implementar máquina de estados explícita.
 - Permitir transições válidas de status.
 - Registrar histórico de mudança de status com usuário/data.
-- Validar autorização ADMIN em toda mutação.
+- Validar `OWNER`, `MANAGER` ou `ATTENDANT` em mutações administrativas e limitar `KITCHEN` às transições operacionais permitidas.
 - Adicionar testes unitários da máquina de estados e integração mínima da alteração.
 
 Escopo proibido:
@@ -143,7 +143,7 @@ Critérios de aceite:
 - Detalhe mostra snapshot, itens, cliente, total e histórico.
 - Máquina de estados rejeita transições inválidas.
 - Mudança de status registra histórico.
-- Apenas ADMIN autenticado altera status.
+- Apenas uma role autorizada para a transição altera status.
 - Pedido cancelado não volta para fluxo ativo.
 - Nenhum valor financeiro histórico é recalculado/alterado.
 
@@ -176,12 +176,14 @@ Verificar se a implementação cumpre a etapa E10 sem extrapolar escopo, sem enf
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário. Priorize análise, apontamentos e bloqueadores.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E10-pedidos-admin-status-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
 - Admin lista pedidos com dados essenciais.
 - Detalhe mostra snapshot, itens, cliente, total e histórico.
 - Máquina de estados rejeita transições inválidas.
 - Mudança de status registra histórico.
-- Apenas ADMIN autenticado altera status.
+- Apenas uma role autorizada para a transição altera status.
 - Pedido cancelado não volta para fluxo ativo.
 - Nenhum valor financeiro histórico é recalculado/alterado.
 
@@ -243,7 +245,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E10 — Pedidos admin e status.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E10-pedidos-admin-status-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -262,14 +266,14 @@ Audite:
 - Detalhe mostra snapshot, itens, cliente, total e histórico.
 - Máquina de estados rejeita transições inválidas.
 - Mudança de status registra histórico.
-- Apenas ADMIN autenticado altera status.
+- Apenas uma role autorizada para a transição altera status.
 - Pedido cancelado não volta para fluxo ativo.
 - Nenhum valor financeiro histórico é recalculado/alterado.
 
 Bloqueadores conhecidos desta etapa:
 - Transição inválida aceita.
 - Histórico não registrado.
-- Mutação sem role ADMIN.
+- Mutação sem role `OWNER`, `MANAGER` ou `ATTENDANT`; `KITCHEN` fica restrito às transições operacionais permitidas.
 - Dados financeiros de pedido editáveis.
 - Cancelado pode voltar para ativo.
 
@@ -278,9 +282,11 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa.
 - Confirmação de ausência de aumento de escopo.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
@@ -289,7 +295,7 @@ Formato da resposta:
 - Detalhe mostra snapshot, itens, cliente, total e histórico.
 - Máquina de estados rejeita transições inválidas.
 - Mudança de status registra histórico.
-- Apenas ADMIN autenticado altera status.
+- Apenas uma role autorizada para a transição altera status.
 - Pedido cancelado não volta para fluxo ativo.
 - Nenhum valor financeiro histórico é recalculado/alterado.
 
@@ -308,7 +314,7 @@ git status --short
 
 - Transição inválida aceita.
 - Histórico não registrado.
-- Mutação sem role ADMIN.
+- Mutação sem role `OWNER`, `MANAGER` ou `ATTENDANT`; `KITCHEN` fica restrito às transições operacionais permitidas.
 - Dados financeiros de pedido editáveis.
 - Cancelado pode voltar para ativo.
 - Ausência de relatório final.
@@ -338,4 +344,3 @@ O agente deve responder com:
 - Pendências.
 - Riscos.
 - Confirmação de ausência de aumento de escopo.
-

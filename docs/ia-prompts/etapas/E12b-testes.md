@@ -185,6 +185,8 @@ Verificar se os testes cobrem os fluxos críticos, se nenhuma lógica de negóci
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E12b-testes-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
 - Fluxo público coberto por E2E.
 - Fluxo admin coberto por E2E.
@@ -248,7 +250,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E12b — Testes críticos.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E12b-testes-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -283,11 +287,11 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa (E12c).
 - Confirmação de ausência de aumento de escopo.
-
-Salve o relatório de auditoria em `docs/ia-auditorias/E12b-testes-auditoria.md`.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite

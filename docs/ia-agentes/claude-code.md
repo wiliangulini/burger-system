@@ -34,15 +34,18 @@ Pasta: `.claude/commands/`.
 | `continue-from-codex` | Continua tarefa iniciada pelo Codex com base no estado real do Git. |
 | `create-code` | Implementa tarefa com escopo controlado e validação. |
 | `debug-app` | Investiga bug, causa raiz e correção mínima. |
-| `final-audit` | Auditoria final antes de commit, entrega ou handoff, sem editar. |
+| `final-audit` | Auditoria final; pode gravar somente o relatório exato autorizado. |
 | `implementation-plan` | Cria plano técnico incremental sem implementar. |
 | `melhorar-ui-ux` | Melhora UI/UX preservando comportamento e responsividade. |
 | `refactor-code` | Refatora com preservação de contratos e comportamento. |
 | `review-code` | Revisa diff ou arquivos sem editar, com achados por severidade. |
 | `revisar-performance` | Revisa performance de Next.js, Prisma, bundle e consultas. |
+| `revisar-prisma-banco` | Revisa schema, migrations, seed, integridade e transações sem escrever no banco. |
 | `revisar-seguranca` | Revisa segurança de auth, RBAC, checkout, webhooks e secrets. |
 
-Todos seguem o mesmo padrão: ler regras obrigatórias, confirmar branch/status, mapear escopo, evitar secrets/comandos destrutivos, revisar diff quando houver alteração e finalizar com status.
+Commands são entrypoints explícitos. Os commands de revisão podem gravar apenas
+o relatório exato autorizado nos argumentos; sem caminho válido, respondem
+somente no chat.
 
 ## Skills
 
@@ -51,18 +54,15 @@ Pasta: `.claude/skills/*/SKILL.md`.
 | Skill | Quando usar |
 |---|---|
 | `architecture-review` | Revisão de decisões arquiteturais, ADRs e fronteiras técnicas. |
-| `continue-from-codex` | Continuidade de trabalho iniciado pelo Codex. |
-| `controlled-implementation` | Implementação de plano aprovado com escopo restrito. |
-| `final-audit` | Auditoria final sem edição. |
-| `implementation-plan` | Plano técnico incremental sem editar arquivos. |
+| `final-audit` | Metodologia de auditoria final; não concede escrita. |
 | `implementation-planning` | Planejamento aprofundado por fases, riscos e critérios de aceite. |
 | `legacy-code-audit` | Auditoria de base existente antes de novas etapas. |
 | `safe-refactor` | Refatoração segura com preservação de comportamento. |
 | `senior-code-agent` | Implementação técnica geral com postura sênior. |
 | `senior-code-review` | Revisão de código/diff sem editar, por severidade. |
-| `senior-review` | Revisão sênior rápida de diff ou arquivos de escopo. |
 
-As skills compartilham checklist comum: branch/status, leitura obrigatória, escopo delimitado, nenhum secret acessado, nenhuma ação destrutiva sem autorização, validações reais e relatório final.
+As skills possuem metodologias distintas. Elas não são entrypoints, não
+substituem commands equivalentes e não concedem permissão de escrita.
 
 ## Regras modulares
 
@@ -78,7 +78,7 @@ Pasta: `.claude/rules/`.
 | `nextjs-app-router.md` | App Router, Server Components, Server Actions e Route Handlers. |
 | `payments-webhooks.md` | Pagamento manual, adapter futuro e webhooks. |
 | `prisma-database.md` | Prisma, migrations, seed, índices e transações. |
-| `security-secrets-deploy.md` | Secrets, deploy, comandos bloqueados e segurança web. |
+| `security-deploy.md` | Secrets, deploy, comandos bloqueados e segurança web. |
 | `ui-ux-tailwind.md` | UI/UX, Tailwind, acessibilidade e responsividade. |
 
 Use a regra modular quando a tarefa tocar o domínio correspondente. Para mudanças sensíveis ou multiarquivo, o padrão é planejar antes de editar.

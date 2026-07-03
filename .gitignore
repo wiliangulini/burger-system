@@ -5,6 +5,7 @@
 
 # Local agent settings
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 .codex/logs/
 .codex-log/
 
