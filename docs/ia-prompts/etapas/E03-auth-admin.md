@@ -27,7 +27,7 @@ Esta etapa consolida as seguintes entradas do `roadmap-execucao-ia.md`:
 
 ## Objetivo da etapa
 
-Implementar autenticação administrativa com Auth.js, sessão segura, autorização por role ADMIN e proteção server-side da área `/admin/*`.
+Implementar autenticação administrativa com Auth.js, sessão segura, autorização inicial exclusiva para `OWNER` e proteção server-side da área `/admin/*`.
 
 ## Pré-requisitos
 
@@ -38,7 +38,7 @@ E02 aprovada; model de Usuario/Admin e roles criado; seed local seguro disponív
 - Configurar Auth.js/NextAuth com Credentials Provider.
 - Validar credenciais no servidor.
 - Comparar senha com bcrypt/argon2.
-- Incluir role ADMIN na sessão de forma tipada e segura.
+- Incluir a role canônica `OWNER` na sessão de forma tipada e segura.
 - Proteger `/admin/*` por middleware ou checagem server-side equivalente.
 - Criar `/admin/login`, logout e layout administrativo mínimo.
 - Criar testes mínimos de autenticação/autorização quando possível.
@@ -48,7 +48,7 @@ E02 aprovada; model de Usuario/Admin e roles criado; seed local seguro disponív
 - Login de cliente, login social, cadastro público ou recuperação de senha completa.
 - Proteger admin apenas por UI.
 - Expor senha, token, stack trace ou motivo detalhado de falha de login.
-- Ignorar role ADMIN nas mutações futuras.
+- Tratar autenticação como autorização global ou ignorar a matriz RBAC nas mutações futuras.
 - Alterar schema de pedidos/checkout fora de necessidade documentada.
 - Não fazer commit, merge, push ou deploy automaticamente.
 
@@ -90,7 +90,7 @@ Antes de alterar qualquer arquivo, leia obrigatoriamente:
 - docs/ia-prompts/etapas/E03-auth-admin.md
 
 Objetivo da etapa:
-Implementar autenticação administrativa com Auth.js, sessão segura, autorização por role ADMIN e proteção server-side da área `/admin/*`.
+Implementar autenticação administrativa com Auth.js, sessão segura, autorização inicial exclusiva para `OWNER` e proteção server-side da área `/admin/*`.
 
 Pré-requisito da etapa:
 E02 aprovada; model de Usuario/Admin e roles criado; seed local seguro disponível; variáveis de Auth.js definidas fora do repositório.
@@ -99,7 +99,7 @@ Escopo permitido:
 - Configurar Auth.js/NextAuth com Credentials Provider.
 - Validar credenciais no servidor.
 - Comparar senha com bcrypt/argon2.
-- Incluir role ADMIN na sessão de forma tipada e segura.
+- Incluir a role canônica `OWNER` na sessão de forma tipada e segura.
 - Proteger `/admin/*` por middleware ou checagem server-side equivalente.
 - Criar `/admin/login`, logout e layout administrativo mínimo.
 - Criar testes mínimos de autenticação/autorização quando possível.
@@ -108,7 +108,7 @@ Escopo proibido:
 - Login de cliente, login social, cadastro público ou recuperação de senha completa.
 - Proteger admin apenas por UI.
 - Expor senha, token, stack trace ou motivo detalhado de falha de login.
-- Ignorar role ADMIN nas mutações futuras.
+- Tratar autenticação como autorização global ou ignorar a matriz RBAC nas mutações futuras.
 - Alterar schema de pedidos/checkout fora de necessidade documentada.
 
 Procedimento obrigatório:
@@ -150,7 +150,7 @@ Critérios de aceite:
 - Credenciais inválidas falham sem vazamento de detalhe sensível.
 - Senha é verificada por hash forte.
 - Sessão inclui role de forma tipada.
-- Usuário sem sessão ou sem role ADMIN não acessa `/admin/*`.
+- Usuário sem sessão ou sem role `OWNER` não acessa `/admin/*` nesta etapa.
 - Rotas admin não dependem apenas de ocultação visual.
 - Logout funciona.
 - Build, typecheck e testes passam.
@@ -184,12 +184,14 @@ Verificar se a implementação cumpre a etapa E03 sem extrapolar escopo, sem enf
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário. Priorize análise, apontamentos e bloqueadores.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E03-auth-admin-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
 - Login admin funciona com credenciais válidas.
 - Credenciais inválidas falham sem vazamento de detalhe sensível.
 - Senha é verificada por hash forte.
 - Sessão inclui role de forma tipada.
-- Usuário sem sessão ou sem role ADMIN não acessa `/admin/*`.
+- Usuário sem sessão ou sem role `OWNER` não acessa `/admin/*` nesta etapa.
 - Rotas admin não dependem apenas de ocultação visual.
 - Logout funciona.
 - Build, typecheck e testes passam.
@@ -252,7 +254,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E03 — Auth admin.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E03-auth-admin-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -271,7 +275,7 @@ Audite:
 - Credenciais inválidas falham sem vazamento de detalhe sensível.
 - Senha é verificada por hash forte.
 - Sessão inclui role de forma tipada.
-- Usuário sem sessão ou sem role ADMIN não acessa `/admin/*`.
+- Usuário sem sessão ou sem role `OWNER` não acessa `/admin/*` nesta etapa.
 - Rotas admin não dependem apenas de ocultação visual.
 - Logout funciona.
 - Build, typecheck e testes passam.
@@ -288,9 +292,11 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa.
 - Confirmação de ausência de aumento de escopo.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
@@ -299,7 +305,7 @@ Formato da resposta:
 - Credenciais inválidas falham sem vazamento de detalhe sensível.
 - Senha é verificada por hash forte.
 - Sessão inclui role de forma tipada.
-- Usuário sem sessão ou sem role ADMIN não acessa `/admin/*`.
+- Usuário sem sessão ou sem role `OWNER` não acessa `/admin/*` nesta etapa.
 - Rotas admin não dependem apenas de ocultação visual.
 - Logout funciona.
 - Build, typecheck e testes passam.
@@ -349,4 +355,3 @@ O agente deve responder com:
 - Pendências.
 - Riscos.
 - Confirmação de ausência de aumento de escopo.
-
