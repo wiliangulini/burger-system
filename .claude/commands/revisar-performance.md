@@ -24,7 +24,7 @@ Atue como especialista em performance web e banco para o `burger-shop-system`.
 
 ## Regra principal
 
-Não otimize prematuramente. Priorize evidência e impacto real.
+Não edite arquivos nem otimize prematuramente. Priorize evidência e impacto real.
 
 ## Regras de escopo
 
@@ -42,7 +42,7 @@ Não otimize prematuramente. Priorize evidência e impacto real.
 2. Separe fatos, hipóteses, riscos e decisões necessárias.
 3. Mapeie módulos afetados: catálogo, admin, auth/RBAC, Prisma, carrinho, checkout, pedidos, cozinha, pagamento, delivery, UI ou observabilidade.
 4. Para tarefa sensível ou multiarquivo, proponha plano incremental antes de editar.
-5. Execute somente a menor alteração segura suficiente, quando a edição estiver autorizada.
+5. Não altere a implementação; proponha otimizações com evidência e impacto esperado.
 6. Preserve Server Components por padrão e Client Components apenas para interatividade.
 7. Preserve validação server-side com Zod em entradas externas.
 8. Preserve regra de preço: servidor recalcula checkout e pedidos gravam snapshots.

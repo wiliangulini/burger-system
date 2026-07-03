@@ -93,7 +93,9 @@ Ao final de cada execução, revisão, correção ou auditoria, responder com:
 - Pendências.
 - Riscos.
 - Confirmação de que não houve aumento de escopo.
-- Salve os relatórios de execução, revisão, correção e auditoria em `docs/ia-auditorias/` com nome `<E0X>-<nome>-<tipo>.md`.
+- Salve os relatórios de execução, revisão, correção e auditoria em
+  `docs/ia-auditorias/` no caminho exato definido pelo prompt da etapa. Em
+  revisão ou auditoria, esse relatório deve ser o único arquivo gravável.
 
 ## Regra de parada
 
@@ -105,4 +107,6 @@ Correções pós-revisão devem se limitar aos problemas obrigatórios apontados
 
 ## Regra de auditoria final
 
-A auditoria final é somente leitura, salvo autorização explícita do usuário. O auditor deve avaliar o diff, os comandos executados, os critérios de aceite e os riscos remanescentes. Não deve implementar código durante a auditoria.
+A auditoria final é somente leitura quanto à implementação e aos documentos do produto. O auditor não deve alterar código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar o relatório da própria auditoria no caminho exato definido pelo prompt da etapa, em `docs/ia-auditorias/`, usando `docs/ia-auditorias/TEMPLATE-agent-report.md`; nenhum outro arquivo pode ser modificado durante a auditoria.
+
+O auditor deve avaliar o diff, os comandos executados, os critérios de aceite e os riscos remanescentes com evidências verificáveis. Deve separar comandos reexecutados durante a auditoria de resultados apenas registrados em relatórios anteriores e nunca declarar uma validação como executada ou aprovada sem evidência. O relatório deve registrar veredito, arquivos analisados, riscos, pendências, validações executadas e não executadas, ausência de aumento de escopo e o status final padronizado.

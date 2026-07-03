@@ -53,6 +53,18 @@ Em revisão ou auditoria, não edite salvo pedido explícito. Para correções t
 - Não leia nem edite `.env`, `.env.*`, secrets ou credenciais.
 - Não execute deploy, push, reset, clean, `rm -rf`, `sudo`, `ssh`, `curl` ou `wget` sem autorização explícita.
 
+## Commands, skills e rules
+
+- Commands são entrypoints explícitos, recebem `$ARGUMENTS` e definem modo,
+  validações e arquivos que podem ser escritos.
+- Skills fornecem metodologia reutilizável e conhecimento especializado; uma
+  skill não concede autorização para editar arquivos.
+- Rules são invariantes de domínio e não representam workflows executáveis.
+- Não invoque command e skill equivalentes simultaneamente; escolha o recurso
+  mais específico para a tarefa.
+- Commands de revisão e auditoria não alteram implementação. Eles podem criar
+  somente o relatório cujo caminho exato esteja autorizado nos argumentos.
+
 ## Contrato de saída
 
 - Separe fatos, hipóteses, riscos e recomendações.

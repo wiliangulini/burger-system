@@ -150,7 +150,7 @@ Arquivos proibidos ou sensíveis:
 - `.env.local`
 
 Critérios de aceite:
-- CRUD de produtos funciona apenas para ADMIN autenticado.
+- CRUD de produtos funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Produto sempre pertence a categoria válida.
 - Preço é tratado de forma compatível com Decimal.
 - Upload aceita somente PNG/JPEG dentro do limite definido.
@@ -187,8 +187,10 @@ Verificar se a implementação cumpre a etapa E06 sem extrapolar escopo, sem enf
 
 Não implemente código nesta revisão, salvo autorização explícita do usuário. Priorize análise, apontamentos e bloqueadores.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E06-produtos-admin-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
-- CRUD de produtos funciona apenas para ADMIN autenticado.
+- CRUD de produtos funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Produto sempre pertence a categoria válida.
 - Preço é tratado de forma compatível com Decimal.
 - Upload aceita somente PNG/JPEG dentro do limite definido.
@@ -254,7 +256,9 @@ git status --short
 ````text
 Atue como Claude Code no VS Code para realizar auditoria final da etapa E06 — Produtos admin.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E06-produtos-admin-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -269,7 +273,7 @@ Objetivo:
 Confirmar se a etapa pode ser encerrada e se está segura para avançar para a próxima etapa.
 
 Audite:
-- CRUD de produtos funciona apenas para ADMIN autenticado.
+- CRUD de produtos funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Produto sempre pertence a categoria válida.
 - Preço é tratado de forma compatível com Decimal.
 - Upload aceita somente PNG/JPEG dentro do limite definido.
@@ -279,7 +283,7 @@ Audite:
 
 Bloqueadores conhecidos desta etapa:
 - Upload inseguro.
-- Mutação sem role ADMIN.
+- Mutação sem role `OWNER` ou `MANAGER`.
 - Preço tratado como Float.
 - Path traversal ou extensão/MIME sem validação.
 - Produto sem categoria válida.
@@ -289,14 +293,16 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para próxima etapa.
 - Confirmação de ausência de aumento de escopo.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
 
-- CRUD de produtos funciona apenas para ADMIN autenticado.
+- CRUD de produtos funciona apenas para `OWNER` ou `MANAGER` autenticado.
 - Produto sempre pertence a categoria válida.
 - Preço é tratado de forma compatível com Decimal.
 - Upload aceita somente PNG/JPEG dentro do limite definido.
@@ -318,7 +324,7 @@ git status --short
 ## Bloqueadores da etapa
 
 - Upload inseguro.
-- Mutação sem role ADMIN.
+- Mutação sem role `OWNER` ou `MANAGER`.
 - Preço tratado como Float.
 - Path traversal ou extensão/MIME sem validação.
 - Produto sem categoria válida.
@@ -349,4 +355,3 @@ O agente deve responder com:
 - Pendências.
 - Riscos.
 - Confirmação de ausência de aumento de escopo.
-

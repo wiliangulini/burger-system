@@ -177,6 +177,8 @@ Verificar se a documentação de deploy está completa, se nenhum secret foi ver
 
 Não implemente código. Não execute deploy.
 
+A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E12c-deploy-revisao.md`; esse deve ser o único arquivo modificado pela revisão.
+
 Verifique obrigatoriamente:
 - `.env.example` sem valores reais e com todas as variáveis.
 - `docs/deploy.md` com checklist detalhado e gate humano explícito.
@@ -200,7 +202,9 @@ Formato da resposta:
 ````text
 Atue como Claude Code no VS Code para realizar a auditoria final do MVP — etapa E12c.
 
-Esta auditoria é somente leitura. Não implemente código, não edite documentação, não faça commit, merge, push ou deploy.
+Esta auditoria é somente leitura quanto à implementação e aos documentos do produto. Não implemente nem altere código, configurações, schema, migrations, testes, prompts ou documentação funcional. A única escrita autorizada é criar ou atualizar `docs/ia-auditorias/E12c-deploy-auditoria-final.md`, que deve ser o único arquivo modificado pela auditoria. Preserve `docs/ia-auditorias/auditoria-final-mvp.md` como artefato auditado, sem editá-lo.
+
+Use `docs/ia-auditorias/TEMPLATE-agent-report.md`. Fundamente cada conclusão em arquivo, diff ou comando verificável; identifique os arquivos analisados; separe comandos reexecutados de resultados apenas registrados em relatórios anteriores; não declare validação executada ou aprovada sem evidência. Não faça commit, merge, push ou deploy.
 
 Leia:
 - docs/ia-prompts/INSTRUCOES-GERAIS-PARA-AGENTES.md
@@ -239,11 +243,11 @@ Formato da resposta:
 - Evidências objetivas.
 - Arquivos alterados no diff final.
 - Comandos validados e resultados informados.
+- Validações reexecutadas separadas das evidências históricas.
 - Riscos remanescentes.
 - Pendências para pós-MVP.
 - Confirmação de ausência de aumento de escopo.
-
-Salve o relatório de auditoria em `docs/ia-auditorias/E12c-deploy-auditoria-final.md`.
+- Status final: Aprovado, Aprovado com observações, Requer ajustes ou Bloqueado.
 ````
 
 ## Critérios de aceite
