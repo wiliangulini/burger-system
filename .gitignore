@@ -27,3 +27,4 @@ coverage/
 .DS_Store
 Thumbs.db
 .vscode/settings.json
+tsconfig.tsbuildinfo
