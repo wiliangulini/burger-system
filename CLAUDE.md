@@ -15,7 +15,7 @@
 - Leia as seções relevantes de `PROJECT_RULES.md` para o fluxo afetado.
 - Se a tarefa continuar trabalho anterior, leia o relatório mais recente em `docs/ia-auditorias/`.
 - Se houver continuidade com Codex, leia `CODEX.md` e `.codex/instructions.md`.
-- Leia regras modulares em `.claude/rules/` quando o módulo for afetado.
+- Leia a rule em `.claude/rules/` cujo frontmatter `paths` casa com o arquivo a editar; o mapa domínio → seção-fonte → rule está em `AGENTS.md §2.1` e `§9`.
 
 ## Disciplina de modo
 
@@ -64,6 +64,8 @@ Em revisão ou auditoria, não edite salvo pedido explícito. Para correções t
   mais específico para a tarefa.
 - Commands de revisão e auditoria não alteram implementação. Eles podem criar
   somente o relatório cujo caminho exato esteja autorizado nos argumentos.
+- O protocolo comum (bloco de validação, formato de relatório, proibições) vive
+  em `PROJECT_RULES.md` e `AGENTS.md`; commands e rules referenciam, não recopiam.
 
 ## Contrato de saída
 

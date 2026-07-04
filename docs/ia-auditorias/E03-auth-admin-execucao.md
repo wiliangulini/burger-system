@@ -2,10 +2,10 @@
 
 ## 1. Identificação
 
-**Agente:** Codex  
-**Data:** 2026-07-02  
-**Branch atual:** `feature/e03-auth-admin`  
-**Tipo de tarefa:** Implementação  
+**Agente:** Codex
+**Data:** 2026-07-02
+**Branch atual:** `feature/e03-auth-admin`
+**Tipo de tarefa:** Implementação
 **Status final:** Aprovado com observações
 
 ## 2. Objetivo
@@ -207,8 +207,8 @@ fixos internos, sem destino controlado pelo formulário.
 
 ## 20. Continuidade para outro agente
 
-**Pode ser continuado por:** Claude Code  
-**Skill/comando sugerido:** revisão de segurança/autorização  
+**Pode ser continuado por:** Claude Code
+**Skill/comando sugerido:** revisão de segurança/autorização
 **Próximo passo recomendado:** executar o prompt de revisão E03, conferindo
 bypass de Proxy/layout, sessão tipada e exposição de erros.
 

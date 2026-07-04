@@ -25,9 +25,9 @@ Server Actions para mutações internas
 Route Handlers para APIs, health checks e webhooks
 ```
 
-**Branch padrão assumida:** `main`.
+**Branch padrão real deste repositório:** `dev` (o repositório não possui `main`; branches de trabalho seguem o padrão `feature/*` e `docs/*`).
 
-Se o repositório usar `dev`, `develop` ou outra branch, o agente deve registrar a branch real no relatório e não trocar de branch sem autorização.
+O agente deve sempre confirmar a branch real com `git branch`, registrá-la no relatório e não trocar de branch sem autorização.
 
 ---
 
@@ -42,6 +42,23 @@ Se o repositório usar `dev`, `develop` ou outra branch, o agente deve registrar
 7. Boas práticas atuais de Next.js App Router, React, TypeScript, Tailwind, PostgreSQL, Prisma, Auth.js, Zod e segurança web.
 
 Em conflito entre instruções, preserve segurança, integridade de dados, autenticação/autorização, checkout, pedidos e estabilidade da branch atual. Comunique antes de aplicar mudanças amplas.
+
+### 2.1 Mapa de responsabilidades (quem responde pelo quê)
+
+Cada assunto tem um dono. Não duplique conteúdo entre arquivos; referencie o dono.
+
+| Arquivo | Responsabilidade | Não deve |
+| --- | --- | --- |
+| `PROJECT_RULES.md` | Fonte de verdade única: escopo, stack, domínio, segurança, **bloco de validação** e **formato de relatório** canônicos. | — |
+| `AGENTS.md` | Roteador operacional comum a todos os agentes: modos, segurança operacional, evidência, git, continuidade e roteamento por domínio. | Recopiar seções inteiras de `PROJECT_RULES.md`. |
+| `CLAUDE.md` | Comportamento do Claude Code (carrega `@PROJECT_RULES.md`). | Duplicar regras de domínio. |
+| `CODEX.md` + `.codex/instructions.md` | Comportamento e matriz de impacto do Codex. | Criar formato de relatório concorrente. |
+| `.claude/commands/*` | Entrypoints de tarefa (`/nome` + `$ARGUMENTS`): papel + regra principal + checklist específico + saída. | Recopiar o protocolo comum. |
+| `.claude/skills/**` | Metodologias reutilizáveis. Não concedem autorização de escrita. | Virar workflow duplicado de um command. |
+| `.claude/rules/*` | Invariantes de domínio acionáveis por `paths`. | Repetir procedimento/validação/bloqueio genéricos. |
+| `docs/ia-agentes/`, `docs/ia-prompts/`, `docs/ia-auditorias/` | Documentação humana e relatórios. | Ser fonte de regra concorrente. |
+
+**Ativação de rules por caminho:** antes de editar um arquivo, consulte em `.claude/rules/` a rule cujo frontmatter `paths` casa com o caminho e leia-a. O protocolo comum (validação, formato de relatório, proibições) vive em `PROJECT_RULES.md` e neste `AGENTS.md`; commands e rules **referenciam**, não recopiam.
 
 ---
 
@@ -154,112 +171,49 @@ Regras:
 
 ---
 
-## 8. Áreas principais do projeto — caminhos prováveis
+## 8. Estrutura de código e escopo por caminho
 
-A estrutura real deve prevalecer. Se os caminhos abaixo ainda não existirem, trate-os como referência de arquitetura.
+A **estrutura real prevalece**. A arquitetura-alvo (route groups, services, libs) está em
+`PROJECT_RULES.md §4` — não a duplique aqui. Estado atual relevante: `app/` na raiz,
+`src/actions/`, `src/lib/auth/`, `src/lib/db.ts`, `src/components/`, `prisma/`. Caminhos de
+`PROJECT_RULES §4` que ainda não existem são referência de arquitetura, não fato.
 
-```txt
-src/app/(public)/
-src/app/(public)/cardapio/
-src/app/(public)/produto/[slug]/
-src/app/(public)/carrinho/
-src/app/(public)/checkout/
-src/app/(public)/pedido/confirmado/[code]/
-src/app/(public)/acompanhar-pedido/[code]/
-src/app/admin/
-src/app/admin/login/
-src/app/admin/dashboard/
-src/app/admin/pedidos/
-src/app/admin/produtos/
-src/app/admin/categorias/
-src/app/admin/configuracoes/
-src/app/admin/cozinha/
-src/app/api/health/live/
-src/app/api/health/ready/
-src/app/api/webhooks/pagamento/
-src/components/ui/
-src/components/public/
-src/components/admin/
-src/components/kitchen/
-src/lib/auth/
-src/lib/prisma/
-src/lib/env/
-src/lib/observability/
-src/services/catalog/
-src/services/cart/
-src/services/checkout/
-src/services/order/
-src/services/payment/
-src/services/delivery/
-src/actions/
-src/schemas/
-src/types/
-prisma/schema.prisma
-prisma/migrations/
-prisma/seed.ts
-```
+Para saber qual invariante se aplica a um caminho, use o frontmatter `paths` das rules em
+`.claude/rules/` (ver §2.1). Não trate uma área como impactada sem evidência no repositório.
 
 ---
 
-## 9. Áreas sensíveis por domínio
+## 9. Roteamento por domínio (regra e seção-fonte)
 
-### 9.1 Autenticação admin/staff e RBAC
+Cada domínio sensível tem uma seção-fonte em `PROJECT_RULES.md` e uma rule acionável. Leia a rule
+correspondente antes de editar; ela exige plano quando a mudança for sensível ou multiarquivo.
 
-Alterações em Auth.js, middleware, sessão, cookies, roles, guards server-side, proteção de Server Actions, Route Handlers e área admin exigem plano e validação específica.
+| Domínio | Seção em PROJECT_RULES | Rule |
+| --- | --- | --- |
+| Auth.js, sessão, RBAC, middleware, área admin | §6 | `.claude/rules/auth-admin-rbac.md` |
+| Prisma, schema, migrations, seed, transações | §7 | `.claude/rules/prisma-database.md` |
+| Catálogo, produtos, imagens, adicionais | §8 | `.claude/rules/catalog-products.md` |
+| Carrinho, checkout, pedidos e snapshots | §9 | `.claude/rules/cart-checkout-orders.md` |
+| Status de pedido e tela de cozinha | §10 | `.claude/rules/kitchen-order-flow.md` |
+| Pagamento manual, gateway futuro e webhooks | §11 | `.claude/rules/payments-webhooks.md` |
+| Delivery, horários e store settings | §12 | `.claude/rules/delivery-store-settings.md` |
+| App Router, Server/Client, Server Actions, Route Handlers | §4 | `.claude/rules/nextjs-app-router.md` |
+| UI/UX e Tailwind | §13 | `.claude/rules/ui-ux-tailwind.md` |
+| Segurança, secrets e deploy (transversal) | §15 | `.claude/rules/security-deploy.md` |
 
-Roles iniciais recomendadas:
-
-```txt
-OWNER
-MANAGER
-ATTENDANT
-KITCHEN
-```
-
-### 9.2 Prisma, banco e migrations
-
-Migrations devem ser pequenas, revisáveis e compatíveis com dados existentes. Não altere ou apague migrations já aplicadas sem autorização. Prefira novas migrations corretivas.
-
-### 9.3 Catálogo, produtos e adicionais
-
-Slug, preço, disponibilidade, imagens e opcionais afetam vendas. Não confie em preço vindo do cliente no checkout.
-
-### 9.4 Carrinho, checkout e pedidos
-
-O carrinho pode existir no client-side, mas o checkout deve recalcular preço, taxa de entrega, disponibilidade e total no servidor. Pedido deve gravar snapshots de nome/preço dos itens vendidos.
-
-### 9.5 Status de pedidos e cozinha
-
-Transições de status devem ser explícitas e validadas. Não permita saltos inválidos sem regra de negócio registrada.
-
-### 9.6 Pagamentos e webhooks
-
-No MVP, pagamento manual é permitido. Preparação futura para Pix/gateway deve ser desacoplada por adapter e idempotente em webhook. Nunca aceite webhook sem validação de assinatura quando houver gateway real.
-
-### 9.7 Configurações da loja e delivery
-
-Horários, abertura manual, taxa de entrega, pedido mínimo e áreas de entrega afetam diretamente o checkout. Toda alteração deve ser auditável.
+Invariantes que nunca mudam sem plano: preço/taxa recalculados no servidor; pedido grava snapshots;
+role validada no servidor; migrations aplicadas não são reescritas destrutivamente; webhook real
+valida assinatura e idempotência. Roles iniciais: `OWNER`, `MANAGER`, `ATTENDANT`, `KITCHEN`.
 
 ---
 
-## 10. Proibições técnicas sem autorização explícita
+## 10. Proibições técnicas
 
-Não fazer sem autorização:
-
-- mudar stack principal;
-- criar backend separado antes do MVP exigir;
-- transformar o sistema em multi-store no MVP;
-- adicionar gateway real de pagamento sem plano de segurança;
-- usar preço do client-side como fonte de verdade;
-- expor dados administrativos em componentes públicos;
-- criar Client Component onde Server Component é suficiente;
-- usar Route Handler para mutação interna quando Server Action resolver melhor;
-- alterar Auth.js/RBAC sem revisão;
-- alterar migrations aplicadas destrutivamente;
-- instalar dependências novas sem justificativa;
-- executar deploy;
-- ler ou editar `.env` e secrets;
-- rodar comandos destrutivos.
+Consolidadas em `PROJECT_RULES.md §3` (restrições de stack/escopo) e `§15` (segurança e secrets), e
+reforçadas na §4 deste arquivo (segurança operacional). Em resumo, sem autorização e plano não se
+deve: mudar a stack, criar backend separado, virar multi-store, adicionar gateway real, usar preço
+do client como verdade, expor dados admin em público, alterar Auth.js/RBAC ou migrations aplicadas,
+instalar dependências, fazer deploy, ler/editar `.env`/secrets ou rodar comandos destrutivos.
 
 ---
 
