@@ -1,18 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "autoCompactEnabled": true,
-  "autoMemoryEnabled": true,
   "cleanupPeriodDays": 14,
-  "defaultMode": "default",
-  "disableAutoMode": "disable",
-  "disableBypassPermissionsMode": "disable",
-  "claudeMdExcludes": [
-    "**/node_modules/**/CLAUDE.md",
-    "**/.next/**/CLAUDE.md",
-    "**/dist/**/CLAUDE.md",
-    "**/build/**/CLAUDE.md",
-    "**/coverage/**/CLAUDE.md"
-  ],
   "permissions": {
     "allow": [
       "Bash(git status)",
@@ -39,24 +27,6 @@
       "Bash(npx prisma validate)",
       "Bash(npx prisma generate)",
       "Bash(npx prisma migrate status)"
-    ],
-    "ask": [
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git merge *)",
-      "Bash(git rebase *)",
-      "Bash(npm install *)",
-      "Bash(npm i *)",
-      "Bash(npm ci)",
-      "Bash(npx prisma migrate dev *)",
-      "Bash(npx prisma db seed *)",
-      "Bash(npx *)",
-      "Bash(docker *)",
-      "Bash(docker-compose *)",
-      "Bash(docker compose *)",
-      "Bash(psql *)",
-      "Bash(pg_dump *)",
-      "WebFetch"
     ],
     "deny": [
       "Read(./.env)",
@@ -114,6 +84,39 @@
       "Bash(ssh *)",
       "Bash(npx prisma migrate reset *)",
       "Bash(npx prisma migrate deploy *)"
+    ],
+    "ask": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(npm install *)",
+      "Bash(npm i *)",
+      "Bash(npm ci)",
+      "Bash(npx prisma migrate dev *)",
+      "Bash(npx prisma db seed *)",
+      "Bash(npx *)",
+      "Bash(docker *)",
+      "Bash(docker-compose *)",
+      "Bash(docker compose *)",
+      "Bash(psql *)",
+      "Bash(pg_dump *)",
+      "WebFetch"
     ]
+  },
+  "autoMemoryEnabled": true,
+  "disableAutoMode": "disable",
+  "claudeMdExcludes": [
+    "**/node_modules/**/CLAUDE.md",
+    "**/.next/**/CLAUDE.md",
+    "**/dist/**/CLAUDE.md",
+    "**/build/**/CLAUDE.md",
+    "**/coverage/**/CLAUDE.md"
+  ],
+  "autoCompactEnabled": true,
+  "defaultMode": "default",
+  "disableBypassPermissionsMode": "disable",
+  "enabledPlugins": {
+    "drydocs@cardio": true
   }
 }

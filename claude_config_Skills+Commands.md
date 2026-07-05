@@ -1,7 +1,9 @@
 # Mapeamento da configuração Claude Code — burger-shop-system
 
-Documento gerado por leitura direta dos arquivos reais do repositório em
-2026-07-03, branch `feature/e03-auth-admin`. Estrutura inspirada em
+Documento atualizado por leitura direta dos arquivos reais do repositório em
+2026-07-05, branch `dev`. Substitui o mapeamento anterior (2026-07-03, branch
+`feature/e03-auth-admin`), que ficou desatualizado depois da otimização de
+commands/rules descrita na seção 2. Estrutura inspirada em
 `CLAUDE_SKILLS_COMMANDS.md` (projeto MokBeats), usada apenas como referência de
 forma — todo o conteúdo abaixo é específico do `burger-shop-system`.
 
@@ -42,6 +44,24 @@ Em conflito, `AGENTS.md` manda preservar segurança, integridade de dados, auten
 
 ## 2. Inventário auditável
 
+### Proveniência: por que commands/rules têm essa forma hoje
+
+- Regra vigente (não só histórico): `AGENTS.md §2.1` ("Mapa de
+  responsabilidades") declara hoje que `.claude/commands/*` não deve "recopiar
+  o protocolo comum" e que `.claude/rules/*` são "invariantes de domínio
+  acionáveis por `paths`" que não devem "repetir procedimento/validação/
+  bloqueio genéricos". É essa regra — verificável a qualquer momento — que
+  explica a forma curta dos commands e o formato `paths` + `## Invariantes`
+  das rules hoje, não só um evento passado.
+- Contexto histórico: `docs/ia-prompts/promptConfig-ia-burgerSystem.md`
+  propôs a arquitetura-alvo (13 commands, 10 rules, 7 skills) que bate com o
+  estado atual, exceto o nome de uma rule (ver "Achado operacional" abaixo).
+  Antes disso, `docs/ia-auditorias/auditoria-prompts-skills.md` (auditoria) e
+  `docs/ia-auditorias/correcao-prompts-skills.md` (correção) já haviam
+  consolidado 11→7 skills, fixado o conjunto em 13 commands e corrigido
+  referências à role inexistente `ADMIN` — antes do encurtamento dos commands
+  e da adição de `paths` às rules, que vieram depois via o `promptConfig`.
+
 ### Contagens reais (recalculadas por leitura direta do repositório)
 
 | Categoria | Esperado (ponto de controle) | Encontrado | Divergência |
@@ -63,7 +83,7 @@ Nenhuma divergência de contagem foi encontrada.
 - `.claude/settings.json` (completo).
 - `package.json` (seção `scripts` e `dependencies`).
 - `docs/ia-auditorias/TEMPLATE-agent-report.md`.
-- Listagem (não conteúdo integral) de `docs/ia-auditorias/` — 14 arquivos; pela sequência execução → correção → revisão → auditoria-final, o mais avançado é `E03-auth-admin-auditoria-final.md`.
+- Listagem (não conteúdo integral) de `docs/ia-auditorias/` — 15 arquivos; pela sequência execução → correção → revisão → auditoria-final, o mais avançado continua sendo `E03-auth-admin-auditoria-final.md` (ainda não há E04).
 
 ### Configurações procuradas e não encontradas
 
@@ -82,16 +102,21 @@ Nenhuma divergência de contagem foi encontrada.
 
 ### Achado operacional (limitação de configuração, não corrigida nesta tarefa)
 
-`.claude/rules/security-secrets-deploy.md` é um arquivo de regra legítimo, mas seu
-**nome de arquivo** colide com os globs de deny de `permissions.deny` em
-`.claude/settings.json` (`Read(./**/*secret*)`, `Read(./**/*secrets*)`) e com
-`Bash(*deploy*)` — que bloqueia qualquer comando de shell cujo argumento contenha a
-substring "deploy", mesmo em nomes de arquivo não relacionados a deploy real.
-Isso é um falso positivo de correspondência por substring, não um problema de
-conteúdo do arquivo. Não foi alterado (alterar `settings.json` está fora do
-escopo desta tarefa de documentação), mas fica registrado como fricção prática:
-ferramentas de leitura/shell que recebam esse caminho como argumento literal
-serão bloqueadas.
+O nome real do arquivo é `.claude/rules/security-deploy.md` — não
+`security-secrets-deploy.md`, nome usado em `docs/ia-prompts/
+promptConfig-ia-burgerSystem.md:304` (arquitetura-alvo proposta), mas que não
+foi o nome efetivamente implementado. Com o nome real, a colisão com os globs
+`Read(./**/*secret*)`/`Read(./**/*secrets*)` de `permissions.deny` **não se
+aplica**: `security-deploy.md` não contém a substring "secret"/"secrets"
+(confirmado nesta atualização — o arquivo foi lido normalmente, sem bloqueio).
+A colisão que **permanece real** é só com `Bash(*deploy*)`, que bloqueia
+qualquer comando de shell cujo argumento contenha a substring "deploy" —
+inclusive este nome de arquivo, sem relação com deploy real. É um falso
+positivo de correspondência por substring, restrito a comandos de shell (não
+afeta leitura direta de arquivo). Não foi alterado (alterar `settings.json`
+está fora do escopo desta tarefa de documentação), mas fica registrado como
+fricção prática: comandos de shell que recebam esse caminho como argumento
+literal serão bloqueados.
 
 ### Divergência real encontrada (scripts de validação)
 
@@ -125,21 +150,29 @@ receberá erro de script inexistente, não falha de teste.
 9 dos 13 commands (`architecture-decision`, `checklist-merge`,
 `continue-from-codex`, `create-code`, `debug-app`, `implementation-plan`,
 `melhorar-ui-ux`, `refactor-code`, `revisar-performance`) usam **o mesmo
-esqueleto de 85 linhas**, com frontmatter único (`description`) e corpo:
+padrão curto** — confirmado por leitura integral dos 9, ~30-36 linhas cada,
+não mais 85 —, com frontmatter único (`description`) e corpo:
 
 ```
 Tarefa/contexto recebido: $ARGUMENTS
-## Papel do agente        (varia por command)
-## Leitura obrigatória     (idêntico: branch/git status → PROJECT_RULES.md → AGENTS.md → CLAUDE.md → rules do módulo → relatório mais recente em docs/ia-auditorias/ + CODEX.md, se houver continuidade → arquivos reais relacionados)
-## Regra principal         (varia — é o que de fato diferencia o command)
-## Regras de escopo        (idêntico: não ler/editar .env/secrets; não deploy/push/reset/clean/rm -rf/sudo/ssh/curl/wget sem autorização; não instalar dependência sem aprovação; não alterar Auth.js/RBAC/Prisma/checkout/pedidos/pagamento/webhook sem plano; não declarar validação sem evidência)
-## Procedimento            (idêntico: 10 passos, dos quais o passo 5 — "execute somente a menor alteração segura suficiente, quando a edição estiver autorizada" — é a única linha que define se o command edita ou não, junto com a "Regra principal")
-## Validações              (idêntico: lint/typecheck/build/test/test:unit/test:e2e/prisma validate/generate/migrate status, com aviso sobre migrate dev/db seed/reset)
-## Formato de relatório    (idêntico: Resumo/Escopo/Arquivos lidos/alterados/criados/Decisões técnicas/Validações executadas e não executadas/Riscos/Próximo passo/Status final)
+## Papel                  (varia por command: papel do agente + regra principal — o real diferenciador)
+## Protocolo comum        (mesmo padrão estrutural, adaptado por command: referencia AGENTS.md §3 modos/§5 evidência/§6 git e PROJECT_RULES.md, mais o mapa domínio→rule de AGENTS.md §9; a maioria fecha com "não recopie o protocolo aqui")
+## <seção específica>     (varia — nome muda por command: Execução/Análise/Plano/Investigação/Checklist/Continuidade; é o segundo real diferenciador)
+## Validação e saída      (referencia PROJECT_RULES.md §17 para validações e §18 para o formato de relatório, sem repetir o conteúdo)
 ```
 
+Isso substitui o esqueleto antigo de ~85 linhas, que repetia inline leitura
+obrigatória, regras de escopo, procedimento de 10 passos, validações e
+formato de relatório em cada command. O protocolo comum foi centralizado em
+`AGENTS.md`/`PROJECT_RULES.md` (ver proveniência na seção 2) e cada command
+passou a só referenciá-lo por número de seção. Importante: o padrão acima
+**não é texto byte-idêntico** entre os 9 — é a mesma estrutura com pequenas
+adaptações gramaticais por command (ex.: alguns dizem "leia a rule... o
+arquivo afetado", outros "leia a(s) rule... os arquivos afetados"; commands
+que não editam código fecham a seção de forma diferente dos que editam).
+
 A tabela abaixo documenta o que **realmente muda** entre esses 9 — o resto do
-template é idêntico e não é repetido por command.
+padrão é estrutural e não é repetido por command.
 
 | Command | Papel do agente | Regra principal (real diferenciador) | Edita arquivos? | Quando usar | Quando não usar |
 |---|---|---|---|---|---|
@@ -165,9 +198,10 @@ template é idêntico e não é repetido por command.
 
 ### 3.2 Commands com contrato de escrita próprio (formato reduzido/customizado)
 
-Estes 4 commands **não** seguem o template de 85 linhas — são mais curtos e têm
-um contrato de escrita explícito e restrito (só podem criar/atualizar **um**
-arquivo de relatório, e só se o caminho vier em `$ARGUMENTS`).
+Estes 4 commands **não** seguem o padrão compartilhado da seção 3.1 (com `##
+Protocolo comum`) — têm, em vez disso, um contrato de escrita explícito e
+restrito (só podem criar/atualizar **um** arquivo de relatório, e só se o
+caminho vier em `$ARGUMENTS`).
 
 #### `/final-audit`
 - Caminho: `.claude/commands/final-audit.md`.
@@ -207,7 +241,7 @@ arquivo de relatório, e só se o caminho vier em `$ARGUMENTS`).
 - Finalidade: revisão de segurança de auth, RBAC, checkout, pedidos, webhooks, secrets e superfície web.
 - Sintaxe: `/revisar-seguranca <contexto>`.
 - Argumentos aceitos: contexto da revisão; mesmo contrato opcional de relatório do `/review-code`.
-- O que faz: checklist especializado — Auth.js/cookies/sessão, matriz RBAC validada no servidor, proteção de Server Actions/Route Handlers, força bruta/enumeração/rate limiting, Zod, checkout idempotente, upload (MIME/extensão/tamanho/path traversal), logs/PII/secrets. Lê explicitamente `auth-admin-rbac.md`, `security-secrets-deploy.md`, `cart-checkout-orders.md`, `payments-webhooks.md`, `catalog-products.md`.
+- O que faz: checklist especializado — Auth.js/cookies/sessão, matriz RBAC validada no servidor, proteção de Server Actions/Route Handlers, força bruta/enumeração/rate limiting, Zod, checkout idempotente, upload (MIME/extensão/tamanho/path traversal), logs/PII/secrets. Lê explicitamente `auth-admin-rbac.md`, `security-deploy.md`, `cart-checkout-orders.md`, `payments-webhooks.md`, `catalog-products.md`.
 - O que pode alterar: nada — nem implementação, nem correção automática.
 - Quando usar: antes de liberar uma etapa que toca autenticação, pagamento ou dados pessoais (ex.: E03 auth-admin).
 - Quando não usar: como substituto de revisão de performance ou de banco — use os commands específicos.
@@ -289,7 +323,7 @@ explicitamente.
 - Capacidade de edição: sim — é a skill de implementação geral.
 - Saída esperada: arquivos, decisões, resultados, riscos, próximo passo.
 - Command semelhante: `/create-code`.
-- Diferença prática: mesmo papel e mesmas restrições — o command é o modo formal de acionar (via `$ARGUMENTS` e template de 85 linhas); a skill é o mesmo comportamento ativado quando o usuário descreve a tarefa em linguagem natural, sem usar `/`.
+- Diferença prática: mesmo papel e mesmas restrições — o command é o modo formal de acionar (via `$ARGUMENTS` e o padrão curto da seção 3.1); a skill é o mesmo comportamento ativado quando o usuário descreve a tarefa em linguagem natural, sem usar `/`.
 - Exemplo de solicitação: "Implemente com postura sênior o CRUD de categorias no admin, seguindo o checklist de validação."
 
 ### `senior-code-review`
@@ -308,26 +342,27 @@ explicitamente.
 
 ## 5. Rules
 
-Todas as 10 rules em `.claude/rules/*.md` compartilham a mesma estrutura (sem
-frontmatter): `## Aplicação`, `## Regras específicas`, `## Procedimento
-obrigatório`, `## Validações recomendadas`, `## Sinais de bloqueio`. As três
-últimas seções são **idênticas, palavra por palavra, nas 10 rules**:
+9 das 10 rules em `.claude/rules/*.md` (todas exceto `security-deploy.md`)
+compartilham hoje esta estrutura curta — confirmado por leitura integral das
+10: frontmatter `paths:` (lista de globs de arquivo) + uma linha "Derivada de
+`PROJECT_RULES.md §X`. Se esta rule divergir, atualize `PROJECT_RULES.md`
+primeiro." + **uma única seção** `## Invariantes` (lista curta de bullets).
+Não repetem mais procedimento obrigatório, validações recomendadas nem sinais
+de bloqueio — isso foi centralizado por referência ao protocolo comum
+(`AGENTS.md §3-§10`, `PROJECT_RULES.md §17`; ver proveniência na seção 2).
 
-**Procedimento obrigatório (comum a todas):** confirmar branch e `git status` →
-ler `PROJECT_RULES.md`/`AGENTS.md`/`CLAUDE.md` → ler arquivos do módulo → identificar
-contratos/consumidores/riscos → propor plano se sensível/multiarquivo →
-implementar a menor alteração segura suficiente → revisar diff → executar
-validações relevantes → informar validações não executadas → finalizar com status.
+**Exceção confirmada — `security-deploy.md`:** a rule transversal de
+segurança/secrets/deploy (sem domínio de arquivo específico) hoje **não** tem
+frontmatter `paths:` e mantém a estrutura longa antiga: `## Aplicação`, `##
+Regras específicas`, `## Procedimento obrigatório`, `## Validações
+recomendadas`, `## Sinais de bloqueio`. Isso é uma inconsistência real e atual
+do próprio arquivo, não um erro deste documento: `AGENTS.md §2.1` diz
+explicitamente que rules não devem "repetir procedimento/validação/bloqueio
+genéricos", mas esta rule ainda repete. Registrado aqui como observação —
+corrigir `.claude/rules/security-deploy.md` está fora do escopo desta
+atualização de documentação.
 
-**Validações recomendadas (comuns):** `npm run lint`, `npm run typecheck`,
-`npm run build`, testes unitários/e2e relevantes se existirem, validação manual
-do fluxo, `npx prisma validate` quando houver Prisma.
-
-**Sinais de bloqueio (comuns):** necessidade de secrets/`.env`; dependência nova
-sem aprovação; alteração destrutiva de banco; mudança de contrato público sem
-revisão; risco de expor admin, pedido, pagamento ou dados pessoais.
-
-Por isso, a tabela abaixo foca apenas no que **muda** — domínio e invariantes
+Por isso, a tabela abaixo foca no que **muda** — domínio e invariantes
 específicos:
 
 | Rule | Domínio | Invariantes principais | Commands/skills mais relacionados |
@@ -340,7 +375,7 @@ específicos:
 | `nextjs-app-router.md` | Arquitetura App Router | Server Components por padrão; Client Components só para estado/handlers/efeitos/browser APIs; Server Actions para mutação interna; Route Handlers para health/webhook/API externa; nunca importar Prisma em Client Component; nunca `NEXT_PUBLIC_*` para secret; avaliar `revalidatePath`/`revalidateTag`. | `/create-code`, `/refactor-code`, `architecture-review` |
 | `payments-webhooks.md` | Pagamento manual, webhooks futuros | MVP usa pagamento manual; gateway real exige ADR+autorização; adapters isolados em `services/payment`; webhook é Route Handler; webhook real valida assinatura/idempotência/`providerRef`; nunca salvar secret de gateway. | `/revisar-seguranca`, `/architecture-decision` |
 | `prisma-database.md` | Schema, migrations, seed | Migrations pequenas/versionadas/revisáveis; não editar migration já aplicada sem autorização; nunca `migrate reset` sem autorização explícita; transações curtas para checkout/pedido; seed idempotente sem senha real; índices para slugs/código de pedido/status+data/auditoria. | `/revisar-prisma-banco` |
-| `security-secrets-deploy.md` | Segurança, secrets, deploy | Nunca ler/editar `.env`/secrets; nunca deploy/push/reset/clean/sudo/ssh/curl/wget sem autorização; nunca expor senha/token/cookie/chave em log; Zod em toda entrada externa; proteger ação admin server-side; nunca migration destrutiva sem revisão humana. | `/revisar-seguranca`, todos os commands (regra transversal) |
+| `security-deploy.md` | Segurança, secrets, deploy | Nunca ler/editar `.env`/secrets; nunca deploy/push/reset/clean/sudo/ssh/curl/wget sem autorização; nunca expor senha/token/cookie/chave em log; Zod em toda entrada externa; proteger ação admin server-side; nunca migration destrutiva sem revisão humana. | `/revisar-seguranca`, todos os commands (regra transversal) |
 | `ui-ux-tailwind.md` | UI/UX, Tailwind | Pública mobile-first e focada em conversão; admin objetivo/legível/eficiente; cozinha com botões grandes e alto contraste; Tailwind sem CSS global grande; formulários com label/erro/loading-disabled; nenhuma lib visual nova sem aprovação. | `/melhorar-ui-ux` |
 
 ---
@@ -351,8 +386,10 @@ específicos:
 
 Sem `hooks`, sem `mcpServers`, sem plugins configurados. Campos de
 comportamento automático: `autoCompactEnabled`, `autoMemoryEnabled`,
-`cleanupPeriodDays: 14`, `defaultMode: "default"`, e exclusões de `CLAUDE.md`
-para `node_modules`/`.next`/`dist`/`build`/`coverage`.
+`cleanupPeriodDays: 14`, `defaultMode: "default"`, `disableAutoMode:
+"disable"` e `disableBypassPermissionsMode: "disable"` (os dois últimos não
+constavam no mapeamento anterior), além das exclusões de `CLAUDE.md` para
+`node_modules`/`.next`/`dist`/`build`/`coverage`.
 
 ### Permissões
 
@@ -375,7 +412,7 @@ para `node_modules`/`.next`/`dist`/`build`/`coverage`.
   - Escalação/acesso remoto: `sudo`, `su`, `ssh`.
   - Rede via shell: `curl`, `wget`.
   - Deploy: qualquer comando contendo a substring `deploy` (ver observação na
-    seção 2 sobre o falso positivo com `security-secrets-deploy.md`).
+    seção 2 sobre o falso positivo com `security-deploy.md`).
   - Prisma destrutivo: `migrate reset`, `migrate deploy`.
 
 ### Implicações práticas para o uso diário
@@ -392,10 +429,12 @@ para `node_modules`/`.next`/`dist`/`build`/`coverage`.
 - `.claude/settings.local.json` existe mas não foi lido nesta auditoria; por
   definição do próprio `settings.json`, nem o Claude Code pode editá-lo
   automaticamente.
-- O glob amplo `Bash(*deploy*)` tem o efeito colateral de bloquear comandos
-  cujo argumento apenas *contenha* a palavra "deploy" em um nome de arquivo,
-  mesmo sem relação com deploy real — visto na tentativa de ler
-  `security-secrets-deploy.md` diretamente por caminho literal.
+- O glob amplo `Bash(*deploy*)` tem o efeito colateral de bloquear comandos de
+  shell cujo argumento apenas *contenha* a palavra "deploy" em um nome de
+  arquivo, mesmo sem relação com deploy real — é o caso do nome real da rule
+  transversal de segurança, `security-deploy.md` (ver "Achado operacional" na
+  seção 2). Isso não afeta a ferramenta de leitura direta de arquivo, só
+  comandos de shell que recebam esse caminho como argumento literal.
 
 ---
 
@@ -408,7 +447,7 @@ confirmados nesta auditoria — mais 1 assimetria (skill sem command).
 
 | Par | Diferença real | Quando escolher qual |
 |---|---|---|
-| `/create-code` × `senior-code-agent` | Mesmo procedimento e mesmas restrições — o command é o entrypoint formal (`$ARGUMENTS`, template de 85 linhas); a skill é o mesmo comportamento ativado por linguagem natural, sem `/`. | Use `/create-code` quando quiser forçar a leitura obrigatória e o relatório padronizado explicitamente; a skill dispara sozinha quando você só descreve a implementação sem usar o command. Não peça as duas para a mesma tarefa. |
+| `/create-code` × `senior-code-agent` | Mesmo procedimento e mesmas restrições — o command é o entrypoint formal (`$ARGUMENTS`, padrão curto da seção 3.1); a skill é o mesmo comportamento ativado por linguagem natural, sem `/`. | Use `/create-code` quando quiser forçar a leitura obrigatória e o relatório padronizado explicitamente; a skill dispara sozinha quando você só descreve a implementação sem usar o command. Não peça as duas para a mesma tarefa. |
 | `/review-code` × `senior-code-review` | O command tem contrato de escrita (pode gerar `docs/ia-auditorias/*-revisao.md` se caminho for informado); a skill nunca escreve arquivo, só responde no chat. | Use o command quando precisar de um relatório persistido para auditoria/handoff; use a skill (por nome) para uma revisão pontual sem artefato. |
 | `/refactor-code` × `safe-refactor` | O command é o entrypoint de refatoração com relatório formal; a skill é a disciplina interna (testes de caracterização, comparação antes/depois) que a refatoração deve seguir — não amplia autorização por conta própria. | `/refactor-code` é o que você digita para iniciar a tarefa; a skill não é uma alternativa a escolher separadamente, é o método que a tarefa (via command ou outro contexto já autorizado) deve seguir. |
 | `/architecture-decision` × `architecture-review` | O command é prospectivo — decidir entre alternativas para algo novo. A skill é retrospectiva — revisar um ADR/decisão já proposta. | Decisão nova pendente → `/architecture-decision`. ADR já escrito para validar → `architecture-review`. |
