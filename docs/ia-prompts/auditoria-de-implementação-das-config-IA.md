@@ -16,7 +16,7 @@ Foi executado anteriormente o prompt `promptConfig-ia-burgerSystem.md`, cujo obj
 6. manter as regras específicas de Next.js, Prisma, Auth.js, Zod, RBAC, checkout, pedidos, pagamentos, cozinha, delivery e UI/Tailwind;
 7. evitar dualidade entre Claude Code e Codex;
 8. preservar os commands úteis `/implementation-plan` e `/revisar-prisma-banco`;
-9. não tocar em código funcional do app sem autorização.
+9. não tocar em código funcional do app sem autorização.  
 
 A pasta temporária `_tmp` ainda existe no projeto e contém o ZIP das configurações de IA do MokBeats usado como referência comparativa. Essa pasta deve ser tratada como material temporário de apoio, não como parte permanente da configuração do projeto.
 
