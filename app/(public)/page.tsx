@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center px-6 py-12">
+    <div className="mx-auto flex w-full max-w-5xl flex-col justify-center px-6 py-12">
       <section className="space-y-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-red-700">
           Setup inicial
@@ -15,6 +15,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
