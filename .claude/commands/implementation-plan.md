@@ -1,5 +1,11 @@
 ---
 description: Cria plano técnico incremental para uma etapa do roadmap sem editar arquivos.
+argument-hint: "[etapa ou solicitação a planejar]"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash
 ---
 
 # Comando: implementation-plan
@@ -33,3 +39,9 @@ e `AGENTS.md §4/§10`; não recopie o protocolo aqui.
 
 Não execute mudanças. Sugira as validações de `PROJECT_RULES.md §17` sem rodá-las.
 Finalize no formato de `PROJECT_RULES.md §18`.
+
+Este command restringe `allowed-tools` a `Read`/`Grep`/`Glob`/`Bash`: a saída é
+sempre no chat, sem gravar arquivo. A exceção geral de `AGENTS.md §3` (gravar
+plano em arquivo quando o usuário pedir explicitamente um artefato) não se
+aplica dentro desta invocação; se o usuário pedir o artefato em arquivo, informe
+que isso exige uma tarefa separada fora deste command.

@@ -90,24 +90,8 @@ secrets/**
 
 ## 5. Validação
 
-Antes de executar comandos, leia `package.json` e confirme scripts reais.
-
-Comandos possíveis, se existirem:
-
-```bash
-npm run lint
-npm run typecheck
-npm run build
-npm test
-npm run test
-npm run test:unit
-npm run test:e2e
-npx prisma validate
-npx prisma generate
-npx prisma migrate status
-npx prisma migrate dev
-npx prisma db seed
-```
+Antes de executar comandos, leia `package.json` e confirme scripts reais. A lista
+de comandos possíveis é canônica em `PROJECT_RULES.md §17`; não a recopie aqui.
 
 Nunca afirme que um comando foi executado se não foi. Para cada comando não executado, informe motivo.
 

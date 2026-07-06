@@ -1,5 +1,6 @@
 ---
 description: Melhora UI/UX de forma incremental, preservando comportamento, responsividade, acessibilidade e Tailwind.
+argument-hint: "[tela ou componente a melhorar]"
 ---
 
 # Comando: melhorar-ui-ux

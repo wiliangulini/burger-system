@@ -1,5 +1,6 @@
 ---
 description: Investiga bugs com hipóteses, evidências, causa raiz, correção mínima e validação.
+argument-hint: "[descrição do bug]"
 ---
 
 # Comando: debug-app

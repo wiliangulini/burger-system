@@ -7,6 +7,14 @@ commands/rules descrita na seção 2. Estrutura inspirada em
 `CLAUDE_SKILLS_COMMANDS.md` (projeto MokBeats), usada apenas como referência de
 forma — todo o conteúdo abaixo é específico do `burger-shop-system`.
 
+> **Nota histórica (2026-07-06):** este documento é um snapshot diagnóstico,
+> não uma fonte de verdade viva. Os achados sobre scripts inexistentes
+> (`npm run test:unit`, `npm run test:e2e`) citados na seção 2 já foram
+> corrigidos: removidos do `allow` em `.claude/settings.json` (Fase 1) e da
+> documentação ativa em `PROJECT_RULES.md §17`, `AGENTS.md §7` e
+> `.codex/instructions.md §5` (Fase 2) da auditoria de configuração de IA.
+> Para o estado atual, consulte esses arquivos diretamente.
+
 ---
 
 ## 1. Visão geral

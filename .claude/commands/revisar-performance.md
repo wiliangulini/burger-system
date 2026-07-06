@@ -1,5 +1,11 @@
 ---
 description: Revisa performance em Next.js, Prisma, Server Components, bundle client-side e consultas.
+argument-hint: "[área ou rota a revisar]"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash
 ---
 
 # Comando: revisar-performance

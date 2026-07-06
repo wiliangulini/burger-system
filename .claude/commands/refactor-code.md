@@ -1,5 +1,6 @@
 ---
 description: Refatora código com segurança, preservando contratos, comportamento, auth, banco e pedidos.
+argument-hint: "[escopo da refatoração]"
 ---
 
 # Comando: refactor-code

@@ -1,5 +1,11 @@
 ---
 description: Analisa decisão arquitetural do sistema de hamburgueria com base no projeto real, trade-offs, segurança e roadmap.
+argument-hint: "[decisão arquitetural a analisar]"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash
 ---
 
 # Comando: architecture-decision

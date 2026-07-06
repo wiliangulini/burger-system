@@ -1,5 +1,6 @@
 ---
 description: Continua tarefa iniciada pelo Codex usando relatório anterior, estado real do Git e regras do projeto.
+argument-hint: "[contexto da tarefa a continuar]"
 ---
 
 # Comando: continue-from-codex

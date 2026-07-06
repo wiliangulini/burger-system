@@ -207,24 +207,26 @@ Use `.env.example` apenas com nomes de variáveis e placeholders.
 
 ## 17. Validação
 
-Antes de executar qualquer comando, confirme scripts reais no `package.json`.
+Antes de executar qualquer comando, confirme scripts reais no `package.json`. Esta
+seção é a fonte canônica da lista de validação; `AGENTS.md` e `.codex/instructions.md`
+referenciam este bloco em vez de recopiá-lo.
 
-Comandos possíveis, se existirem:
+Comandos possíveis, se existirem no `package.json`:
 
 ```bash
 npm run lint
 npm run typecheck
 npm run build
 npm test
-npm run test
-npm run test:unit
-npm run test:e2e
 npx prisma validate
 npx prisma generate
 npx prisma migrate status
 npx prisma migrate dev
 npx prisma db seed
 ```
+
+Outros scripts (ex.: testes de integração/e2e) só devem ser usados se estiverem
+de fato declarados em `package.json` no momento da tarefa.
 
 Critérios:
 

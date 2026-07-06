@@ -1,5 +1,6 @@
 ---
 description: Executa auditoria final antes de commit, entrega ou continuidade por outro agente.
+argument-hint: "[caminho exato em docs/ia-auditorias/*-auditoria-final.md]"
 ---
 
 # Comando: final-audit

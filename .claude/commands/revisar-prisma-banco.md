@@ -1,5 +1,6 @@
 ---
 description: Revisa schema, migrations, seed, integridade e transações Prisma sem alterar banco ou implementação.
+argument-hint: "[escopo Prisma/banco; caminho -revisao.md opcional]"
 ---
 
 # Comando: revisar-prisma-banco

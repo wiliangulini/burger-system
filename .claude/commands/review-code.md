@@ -1,5 +1,6 @@
 ---
 description: Revisa implementação, diff ou arquivos sem editar, classificando achados por severidade.
+argument-hint: "[contexto da revisão; caminho -revisao.md opcional]"
 ---
 
 # Comando: review-code

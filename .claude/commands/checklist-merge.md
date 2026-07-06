@@ -1,5 +1,11 @@
 ---
 description: Executa checklist objetivo antes de merge, verificando escopo, diff, segurança, validações e risco de regressão.
+argument-hint: "[escopo do diff ou PR]"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash
 ---
 
 # Comando: checklist-merge

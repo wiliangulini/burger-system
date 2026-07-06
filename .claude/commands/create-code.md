@@ -1,5 +1,6 @@
 ---
 description: Implementa tarefa no sistema de hamburgueria com escopo controlado, validação e relatório de continuidade.
+argument-hint: "[tarefa a implementar]"
 ---
 
 # Comando: create-code

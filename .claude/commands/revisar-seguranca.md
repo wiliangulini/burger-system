@@ -1,5 +1,6 @@
 ---
 description: Revisa segurança de auth, RBAC, checkout, pedidos, webhooks, secrets e superfície web.
+argument-hint: "[escopo de segurança; caminho -revisao.md opcional]"
 ---
 
 # Comando: revisar-seguranca
