@@ -1,56 +1,84 @@
 # Burger Shop System
 
-Sistema web single-store para hamburgueria. Este repositório está no setup inicial do MVP: base Next.js App Router, TypeScript, Tailwind CSS, qualidade mínima, teste de sanity e CI.
+Sistema web para gestão de pedidos de uma hamburgueria (single-store), em desenvolvimento incremental por etapas.
 
-## Escopo do MVP
+## Status
 
-O MVP será limitado a:
+Em desenvolvimento. Já implementados: modelagem completa do domínio (Prisma) e autenticação do painel administrativo, com testes e CI. Catálogo público, carrinho, checkout e tela de cozinha ainda não foram construídos — ver [Limitações](#limitações).
 
-- catálogo público;
-- carrinho sem login;
-- checkout com pedido persistido;
-- pagamento manual/offline;
-- painel administrativo protegido;
-- CRUD de categorias e produtos;
-- upload seguro de imagens;
-- pedidos, status e tela de cozinha;
-- configurações operacionais;
-- dashboard básico;
-- testes e deploy controlado.
+## Problema
 
-Itens pós-MVP ficam fora do escopo obrigatório e estão registrados em `docs/backlog-pos-mvp.md`.
+Pequenos estabelecimentos que atendem por WhatsApp/telefone perdem controle de pedidos, status e histórico à medida que o volume cresce. O objetivo é um sistema simples, single-store, com pagamento manual/offline (sem gateway) e sem exigir login do cliente — ver [ADR 0003](docs/adr/0003-escopo-mvp.md).
+
+## Funcionalidades
+
+- **Autenticação administrativa**: login com e-mail/senha, hash de credenciais (bcrypt), gestão de sessão e políticas de acesso — com suíte de testes dedicada.
+- **Modelagem de domínio completa** (Prisma/PostgreSQL): categorias, produtos, pedidos, itens de pedido, histórico de status, configuração da loja e log de auditoria.
+- **Base do painel administrativo**: rotas protegidas (`app/admin/(protected)`) separadas da área pública.
 
 ## Stack
 
-- Next.js App Router
-- React
-- TypeScript
-- Tailwind CSS
-- PostgreSQL
-- Prisma
-- Auth.js
-- Zod
-- GitHub Actions
-- Vercel
+Next.js (App Router) · React · TypeScript · Tailwind CSS · PostgreSQL · Prisma · Auth.js · Zod · Jest + Testing Library · GitHub Actions (CI)
 
-## Comandos locais
+## Arquitetura
 
-```bash
-npm run dev
-npm run lint
-npm run typecheck
-npm test
-npm run build
+```
+app/
+  (public)/          rotas públicas
+  admin/login/        tela de login
+  admin/(protected)/  área administrativa autenticada
+src/
+  actions/            server actions (ex.: auth.ts)
+  lib/auth/            credenciais, sessão, políticas de acesso
+prisma/
+  schema.prisma        modelo de dados
+  migrations/
+tests/
+  auth/                 testes de autenticação (ações, credenciais, sessão, política, formulário)
+docs/adr/               decisões de arquitetura registradas
 ```
 
-## Convenções de trabalho
+Decisões documentadas em `docs/adr/` (modelo operacional, stack e escopo do MVP).
 
-- Branch de integração atual: `dev`.
-- Branches de etapa devem usar nomes objetivos, por exemplo `feature/e01-setup-inicial`.
-- Não fazer commit direto em `main`.
-- Não fazer push, merge, deploy, migrations destrutivas ou alterações em secrets sem autorização humana explícita.
-- Cada etapa deve ter relatório em `docs/ia-auditorias/`.
+## Instalação
 
-## Estado da E01
+```bash
+git clone https://github.com/wiliangulini/burger-system.git
+cd burger-system
+npm install
+cp .env.example .env   # preencha com suas próprias credenciais locais
+npx prisma migrate dev
+npm run dev
+```
 
-A etapa E01 cria somente a base técnica e documental. Ela não implementa domínio, Prisma, Auth.js, admin, API, carrinho, checkout, pedidos ou upload.
+## Variáveis de ambiente
+
+Definidas em `.env.example` (sem valores reais):
+
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | Conexão PostgreSQL local |
+| `SEED_ADMIN_ENABLED` | Habilita seed de admin em desenvolvimento (`false` por padrão) |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | Credenciais do seed de desenvolvimento, quando habilitado |
+
+## Comandos
+
+```bash
+npm run dev        # ambiente de desenvolvimento
+npm run build       # build de produção
+npm run lint         # ESLint
+npm run typecheck    # checagem de tipos
+npm test              # Jest + Testing Library
+```
+
+## Testes
+
+Suíte com Jest e Testing Library cobrindo o fluxo de autenticação (ações, validação de credenciais, sessão, política de acesso e formulário de login). CI no GitHub Actions executa lint, typecheck, testes e build a cada push/PR para `dev` e `main`.
+
+## Limitações
+
+Este é um projeto em construção incremental (etapas documentadas em `docs/ia-auditorias/`). Ainda não implementados: catálogo público navegável, carrinho, checkout, upload de imagens, tela de cozinha e dashboard operacional — todos previstos no escopo do MVP ([ADR 0003](docs/adr/0003-escopo-mvp.md)), mas pendentes.
+
+## Contexto
+
+Projeto pessoal, desenvolvido com apoio de agentes de IA sob supervisão humana (fluxo documentado em `docs/adr/0001-ia-operating-model.md`). Convenção do repositório: integração ocorre na branch `dev`; `main` fica reservada.
