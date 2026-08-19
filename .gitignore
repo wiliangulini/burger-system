@@ -13,6 +13,7 @@
 # Temporary files
 _tmp/
 *.log
+.playwright-mcp/
 
 # Dependencies and builds
 node_modules/
